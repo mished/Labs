@@ -27,6 +27,8 @@ namespace BiosInfo {
             }
         }
 
+        // https://msdn.microsoft.com/en-us/library/aa394077(v=vs.85).aspx
+        //
         private static readonly string[] wmiBiosCharacteristics = {
           "00-Reserved",
           "01-Reserved",
