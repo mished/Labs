@@ -11,12 +11,15 @@ namespace BiosInfo {
 
                 foreach(var infoObj in info) {
                     var biosVer  = (string[])infoObj["BIOSVersion"];
+                    var biosRls  = (string)infoObj["ReleaseDate"];
                     var biosChrs = (ushort[])infoObj["BiosCharacteristics"];
+
 
                     yield return
                         "Bios Version:\n"      +
                             $"{biosVer[0]}\n"  +
-                            $"{biosVer[1]}\n"  ;
+                        "Bios Release Date:\n" +
+                            $"{biosRls}\n"     ;
 
                     foreach (var ch in biosChrs) {
                         if      (ch >= 0  && ch <= 39)  yield return wmiBiosCharacteristics[ch];
@@ -25,6 +28,25 @@ namespace BiosInfo {
                     }
                 }
             }
+        }
+
+        public static IEnumerable<string> GetUsbInfo() {
+            using(var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_USBControllerDevice")) {
+                var info = searcher.Get();
+
+                foreach (var infoObj in info) {
+                    var dependent = (string)infoObj["Dependent"];
+                    var deviceId = dependent.Split('=')[1];
+
+                    using(var usbSearcher = new ManagementObjectSearcher($"SELECT * FROM Win32_PnPEntity WHERE DeviceID = {deviceId}")) {
+                        var usbInfo = usbSearcher.Get();
+
+                        foreach(var usbObj in usbInfo) {
+                            yield return (string)usbObj["Description"];
+                        }
+                    }
+                }
+            }            
         }
 
         // https://msdn.microsoft.com/en-us/library/aa394077(v=vs.85).aspx
