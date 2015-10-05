@@ -43,55 +43,55 @@ alphabetFreq = [{ 'char': 'О', 'freq': 0.09 },  { 'char': 'Е', 'freq': 0.072 }
                 { 'char': 'Й', 'freq': 0.010 }, { 'char': 'Х', 'freq': 0.009 }, { 'char': 'Ж', 'freq': 0.007 }, { 'char': 'Ю', 'freq': 0.006 },
                 { 'char': 'Ш', 'freq': 0.006 }, { 'char': 'Ц', 'freq': 0.004 }, { 'char': 'Щ', 'freq': 0.003 }, { 'char': 'Э', 'freq': 0.003 },
                 { 'char': 'Ф', 'freq': 0.002 }]
-##########               
+                
+####################################
 
+getFrequencies = (text) ->
+  i = 0
+  chars = {}
+  charArray = []
+  charsCount = 0
 
-# get character frequencies
-# in given encoded text
-##########
-
-i = 0
-chars = {}
-charArray = []
-charsCount = 0
-
-while i <= text.length
-  if '9' >= text[i] >= '0'
-    ch = text[i..++i]
-    if chars.hasOwnProperty ch then chars[ch]++; charsCount++
-    else chars[ch] = 1
-  i++
+  while i <= text.length
+    if '9' >= text[i] >= '0'
+      ch = text[i..++i]
+      if chars.hasOwnProperty ch then chars[ch]++
+      else chars[ch] = 1
+      charsCount++
+    i++
   
-for ch of chars
-  chars[ch] /= charsCount
+  for ch of chars
+    chars[ch] /= charsCount
 
-for ch of chars
-  charArray.push { 'char': ch, 'freq': chars[ch] }
+  for ch of chars
+    charArray.push { 'char': ch, 'freq': chars[ch] }
   
-charArray.sort (a, b) -> b.freq - a.freq
-
-##########
-
-
-# print table
-##########
-
-body  = document.body
-table = document.createElement 'table'
-table.classList.add 'table'
-table.style['max-width'] = '70%'
-encRow = table.insertRow()
-encRow.insertCell().innerHTML = 'Encoded char'
-decRow = table.insertRow()
-decRow.insertCell().innerHTML = 'Decoded char'
-
-for i in [0..charArray.length - 1]
-  encRow.insertCell().innerHTML = charArray[i].char
-  decRow.insertCell().innerHTML = alphabetFreq[i].char
+  charArray.sort (a, b) -> b.freq - a.freq
   
-body.appendChild table
-  
-##########
-  
+####################################
 
-    
+printTable = (charFreq, alphabetFreq) ->
+  body  = document.body
+  table = document.createElement 'table'
+  table.classList.add 'table'
+  table.style['max-width'] = '70%'
+  encFreqRow = table.insertRow()
+  encFreqRow.insertCell().innerHTML = 'Encoded char\'s freq'
+  encRow = table.insertRow()  
+  encRow.insertCell().innerHTML = 'Encoded char'  
+  decRow = table.insertRow()
+  decRow.insertCell().innerHTML = 'Decoded char'
+  decFreqRow = table.insertRow()
+  decFreqRow.insertCell().innerHTML = 'Decoded char\'s freq'
+
+  for i in [0..charFreq.length - 1]
+    encFreqRow.insertCell().innerHTML = charFreq[i].freq.toFixed(3)
+    encRow.insertCell().innerHTML = charFreq[i].char
+    decRow.insertCell().innerHTML = alphabetFreq[i].char
+    decFreqRow.insertCell().innerHTML = alphabetFreq[i].freq.toFixed(3)
+  
+  body.appendChild table
+  
+####################################
+
+printTable getFrequencies(text), alphabetFreq
