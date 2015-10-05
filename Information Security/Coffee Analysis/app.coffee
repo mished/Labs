@@ -71,6 +71,8 @@ getFrequencies = (text) ->
 ####################################
 
 printTable = (charFreq, alphabetFreq) ->
+  key = {}
+
   body  = document.body
   table = document.createElement 'table'
   table.classList.add 'table'
@@ -86,12 +88,38 @@ printTable = (charFreq, alphabetFreq) ->
 
   for i in [0..charFreq.length - 1]
     encFreqRow.insertCell().innerHTML = charFreq[i].freq.toFixed(3)
-    encRow.insertCell().innerHTML = charFreq[i].char
+    encRow.insertCell().innerHTML = charFreq[i].char    
     decRow.insertCell().innerHTML = alphabetFreq[i].char
+    key[charFreq[i].char] = alphabetFreq[i].char
     decFreqRow.insertCell().innerHTML = alphabetFreq[i].freq.toFixed(3)
   
   body.appendChild table
+  key
   
 ####################################
 
-printTable getFrequencies(text), alphabetFreq
+printText = (text, key) ->
+  res = ''
+  i = 0
+  while i <= text.length
+    if '9' >= text[i] >= '0'
+      ch = text[i..++i]
+      res += key[ch]
+    else if text[i+1] is ' ' then res += text[i]
+    i++
+      
+  div = document.createElement 'div'
+  hr = document.createElement 'hr'
+  div.innerHTML = res
+  document.body.appendChild div
+  document.body.appendChild hr
+  res
+
+####################################
+  
+key = printTable getFrequencies(text), alphabetFreq
+printText  text, key
+
+key['13'] = 'В'
+
+printText  text, key
