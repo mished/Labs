@@ -148,7 +148,7 @@ key.decodeChar = (ch, value) ->
 
 printText  text, key
 
-# manualy swap encoded chars with real values
+# manually swap encoded chars with real values
 
 key.decodeChar '13', 'В'
 key.decodeChar '42', 'Т'
