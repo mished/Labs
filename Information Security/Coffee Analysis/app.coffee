@@ -105,7 +105,8 @@ printText = (text, key) ->
     if '9' >= text[i] >= '0'
       ch = text[i..++i]
       res += key[ch]
-    else if text[i+1] is ' ' then res += text[i]
+    else if text[i] is '\n' then res += ' '
+    else if text[i+1] is ' ' or text[i+1] is '\n'  then res += text[i]
     i++
       
   div = document.createElement 'div'
@@ -116,10 +117,64 @@ printText = (text, key) ->
   res
 
 ####################################
+
+printKey = (key) ->
+  hr = document.createElement 'hr'
+  body  = document.body
+  table = document.createElement 'table'
+  table.classList.add 'table'
+  table.style['max-width'] = '70%'
+  encRow = table.insertRow()  
+  encRow.insertCell().innerHTML = 'Encoded char'  
+  decRow = table.insertRow()
+  decRow.insertCell().innerHTML = 'Decoded char'
+
+  for ch of key
+    if ch isnt 'decodeChar'
+      encRow.insertCell().innerHTML = ch    
+      decRow.insertCell().innerHTML = key[ch]
   
+  body.appendChild table
+  body.appendChild hr
+  
+####################################
+
 key = printTable getFrequencies(text), alphabetFreq
+
+key.decodeChar = (ch, value) ->
+  for i of this
+    if key[i] is value then key[i] = '{' + i + '}'
+  this[ch] = value
+
 printText  text, key
 
-key['13'] = 'В'
+# manualy swap encoded chars with real values
+
+key.decodeChar '13', 'В'
+key.decodeChar '42', 'Т'
+key.decodeChar '88', 'Х'
+key.decodeChar '16', 'И'
+key.decodeChar '17', 'Н'
+key.decodeChar '34', 'Я'
+key.decodeChar '76', 'П'
+key.decodeChar '28', 'Г'
+key.decodeChar '75', 'Ж'
+key.decodeChar '51', 'У'
+key.decodeChar '37', 'Р'
+key.decodeChar '58', 'Ы'
+key.decodeChar '69', 'З'
+key.decodeChar '38', 'Ч'
+key.decodeChar '78', 'Ь'
+key.decodeChar '72', 'Б'
+key.decodeChar '64', 'Ш'
+key.decodeChar '61', 'Ю'
+key.decodeChar '91', 'Й'
+key.decodeChar '98', 'Ц'
+key.decodeChar '21', 'Щ'
+key.decodeChar '19', 'Ф'
+
+####################################
+
+printKey key
 
 printText  text, key
