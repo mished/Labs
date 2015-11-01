@@ -61,6 +61,15 @@ namespace VDecryptor.Properties {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на ABCDEFGHIJKLMNOPQRSTUVWXYZ.
+        /// </summary>
+        internal static string EnglishAlphabet {
+            get {
+                return ResourceManager.GetString("EnglishAlphabet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на kynlogk_akfwssvhkg_lbpwzovpsf_jkqxuveeqgdbwlpusnmukqbjtuksiak__xuvkofkb
         ///gstwqyfsmqbntyotskgypexgdzhzovkpqggeegwglasjqealykpfs_qk_xlvkg_pukwfjtpoklfkrxt
         ///cyrsigdgxybxsloqofsvhkcjvfeqlpqynoltpnyvwyrshponflyk_tjjtaxy_kjtzbtanlpdswgyswvob
