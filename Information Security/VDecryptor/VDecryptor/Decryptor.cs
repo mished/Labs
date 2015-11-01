@@ -14,5 +14,10 @@ namespace VDecryptor
         {
             this.keyLength = keyLength;
         }
+        public string GetSource()
+        {
+           return Properties.Resources.Source;
+        }
+                
     }
 }

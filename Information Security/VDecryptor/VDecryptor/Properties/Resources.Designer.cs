@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace VDecryptor {
+namespace VDecryptor.Properties {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace VDecryptor {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resource {
+    internal class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal Resource() {
+        internal Resources() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace VDecryptor {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("VDecryptor.Resource", typeof(Resource).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("VDecryptor.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,21 @@ namespace VDecryptor {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на kynlogk_akfwssvhkg_lbpwzovpsf_jkqxuveeqgdbwlpusnmukqbjtuksiak__xuvkofkb
+        ///gstwqyfsmqbntyotskgypexgdzhzovkpqggeegwglasjqealykpfs_qk_xlvkg_pukwfjtpoklfkrxt
+        ///cyrsigdgxybxsloqofsvhkcjvfeqlpqynoltpnyvwyrshponflyk_tjjtaxy_kjtzbtanlpdswgyswvob
+        ///bshscnswgjlawcqbysppkoszrtafpprneheswflbgokgkyixuvprsppkg_lbgstbkyustcnvaugkexb
+        ///qwhlpqywrlfkqdvvsnehmtazgkdntsnzjxkbmea_ctas_qk_trgkq_lc_nvsqdvshpondhpnokokb
+        ///ssjnzg_zbgsjlbcbdkbtaslxpeqgezhf_tinyhedbjpgcnkar_zalfkja_jk_tjjtaxy_kqjlcdswgckfxyk
+        ///zhkgrbbusgxnopvsneheswfltinvy [остаток строки не уместился]&quot;;.
+        /// </summary>
+        internal static string Source {
+            get {
+                return ResourceManager.GetString("Source", resourceCulture);
             }
         }
     }
