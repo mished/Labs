@@ -128,15 +128,24 @@ namespace VDecryptor
             for(int i=1;i<shifts.Length;i++)
                 shifts[i] = ShiftDifferent(source[0][0], Shift(source[i][0], shifts[i]));            
         }
+        private IEnumerable<char> GetKey(int[] shift)
+        {
+            yield return 'b';
+            for (int i = 1; i < keyLength; i++)
+                yield return Shift('b', (26 - shift[i]));
+        }
         public void DO()
         {
             var columns = BuildColumns();
             var shifts = GetShifts(columns);
             ShiftByFirst(shifts, columns);
-            foreach (var shift in shifts)
+            var key = GetKey(shifts).ToArray();
+            for(int i=0;i<25;i++)
             {
-                Console.WriteLine($"Shift: {shift}");
+                Console.WriteLine($"Key: {new string(key)}");
                 Console.WriteLine("--------------------------------");
+                Shift(key);
+               
             }           
         }        
     }
