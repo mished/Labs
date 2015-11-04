@@ -12,57 +12,132 @@ namespace VDecryptor
         private int keyLength;
         private string source;
         private int colLnth;
-        private const double matchIndex= 0.0662;
+        private const double matchIndex = 0.0662;
         private string alphabet;
+        private double[] maxShifts;
 
-        public Decryptor(int keyLength,string source)
+        public Decryptor(int keyLength, IEnumerable<char> source)
         {
             this.keyLength = keyLength;
-            this.source = source.Trim('\n','\r');
-            colLnth = (int)Math.Ceiling((decimal)source.Length);
-            alphabet = Resources.EnglishAlphabet;
-        }        
-        private IEnumerable<int> GenerateIndexes(int column,int colLnth)
+            this.source = source.ToString();
+            colLnth = (int)Math.Ceiling((decimal)this.source.Length / keyLength);
+            alphabet = Resources.EnglishAlphabet.ToLower();
+            maxShifts = new double[keyLength];
+        }
+        private IEnumerable<int> GenerateIndexes(int column, int colLnth)
         {
-            for(int i=0;i<colLnth;i++)
+            int j = 0;
+            for (int i = 0; i < colLnth; i++)
             {
-                yield return column ;
-                column += 5;
+                yield return j + column;
+                j += 5;
             }
         }
         private char[][] BuildColumns()
-        {            
+        {
             var result = new char[keyLength][];
             for (int i = 0; i < keyLength; i++)
             {
-                var column = source.Where((x,index)=>GenerateIndexes(i,colLnth).Contains(index));
-                result[i]=column.ToArray();
+                var column = source.Where((x, index) => GenerateIndexes(i, colLnth).Contains(index));
+                result[i] = column.ToArray();
             }
 
             return result;
-        } 
+        }
         private int Calc(int a)
         {
             return a * (a - 1);
         }
         private double[] GetMatchIndexes(char[][] columns)
         {
-            var indexes =new double[columns.Rank];
-            for(int i=0;i<columns.Rank;i++)
+            var indexes = new double[keyLength];
+            var contrGroup = columns[0].GroupBy(x => x)
+                                      .ToDictionary(y => y.Key, x => x.Count());
+            for (int i = 1; i < keyLength; i++)
             {
-                var denominator = Calc(columns[i].Length);
-                var numerator=columns[i].Aggregate(0,(x,y)=>x+Calc(alphabet.IndexOf(y)+1));
+                double denominator = columns[i].Length * columns[0].Length;
+                var group = columns[i].GroupBy(x => x)
+                                      .ToDictionary(y => y.Key, x => x.Count());
+
+                double numerator = group.Aggregate(0, (x, y) => x + GetValue(y, contrGroup));
 
                 indexes[i] = numerator / denominator;
             }
             return indexes;
         }
-        private IEnumerable<char> Shift(char[] source,int count)
+        private int GetValue(KeyValuePair<char, int> pair, Dictionary<char, int> dictionary)
         {
-            foreach(var ch in source)
+            int a = 0;
+            var success = dictionary.TryGetValue(pair.Key, out a);
+            if (success)
+                return a * pair.Value;
+
+            return 0;
+        }
+        private void Shift(char[][] source)
+        {
+            for (int i = 1; i < keyLength; i++)
+                for (int j = 0; j < source[i].Length; j++)
+                {
+                    var index = alphabet.IndexOf(source[i][j])+1;
+                    index = index > 25 ? index - 25 : index;
+                    source[i][j] = alphabet[index];
+                }
+
+        }
+        private void Shift(char[] source)
+        {
+            for (int i = 0; i < source.Length; i++)
             {
-                yield return alphabet[alphabet.IndexOf(ch) + count];
+                var index = alphabet.IndexOf(source[i]) + 1;
+                index = index > 25 ? index - 25 : index;
+                source[i] = alphabet[index];
             }
         }
+        private int[] GetShifts(char[][] source)
+        {
+            var shifts = new int[keyLength];
+            var maxIndexes = new double[keyLength];
+            for (int i = 0; i < 26; i++)
+            {
+                var indexes = GetMatchIndexes(source);
+                for (int j = 1; j < keyLength; j++)
+                {
+                    maxIndexes[j] = maxIndexes[j] > indexes[j] ? maxIndexes[j] : indexes[j];
+                    shifts[j] = maxIndexes[j] > indexes[j] ? shifts[j] : i;
+                }
+                Shift(source);
+            }
+            return shifts;
+        }
+        private int ShiftDifferent(char fst, char another)
+        {
+            var fstidx = alphabet.IndexOf(fst);
+            var anotheredx = alphabet.IndexOf(another);
+
+            return Math.Abs(fst - another);
+        }
+        private char Shift(char ch,int count)
+        {
+            var index = alphabet.IndexOf(ch) + count;
+            index = index > 25 ? index - 25 : index;
+            return alphabet[index];
+        }
+        private void ShiftByFirst(int[] shifts,char[][] source)
+        {
+            for(int i=1;i<shifts.Length;i++)
+                shifts[i] = ShiftDifferent(source[0][0], Shift(source[i][0], shifts[i]));            
+        }
+        public void DO()
+        {
+            var columns = BuildColumns();
+            var shifts = GetShifts(columns);
+            ShiftByFirst(shifts, columns);
+            foreach (var shift in shifts)
+            {
+                Console.WriteLine($"Shift: {shift}");
+                Console.WriteLine("--------------------------------");
+            }           
+        }        
     }
 }
