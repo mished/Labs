@@ -1,1 +1,4 @@
-module.exports = require('./src/rsa.js');
+var rsa = require('./src/rsa.js');
+module.exports = {
+	generateKeys: rsa.generateKeys
+};
