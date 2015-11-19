@@ -15,8 +15,7 @@ function generateKeys(capacity) {
   }
   let n = p.multiply(q);
   let f = p.minus(1).multiply(q.minus(1));
-  //let e = getPublicExp(f);
-  let e = getFermatPrime();
+  let e = getPublicExp(f);
   let d = getPrivateExp(e, f);
 
   return {
@@ -70,11 +69,6 @@ function getPublicExp(euler) {
   return e;
 }
 
-function getFermatPrime() {
-  let primes = [3, 5, 13, 257, 65537];
-  return BI(primes[Math.floor(Math.random() * (4))]);
-}
-
 function getPrimeBetween(min, max) {
   let p = BI.randBetween(min, max);
   while (!p.isPrime()) {
@@ -122,7 +116,6 @@ module.exports = {
   decode: decode,
   getPrivateExp: getPrivateExp,
   getPublicExp: getPublicExp,
-  getFermatPrime: getFermatPrime,
   getPrimeBetween: getPrimeBetween,
   gcd: gcd,
   egcd: egcd
