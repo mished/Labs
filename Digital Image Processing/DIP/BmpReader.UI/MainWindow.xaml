@@ -1,0 +1,15 @@
+﻿<Window x:Class="BmpReader.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:BmpReader.UI"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="500" Width="980">
+    <Grid>
+        <Image x:Name="image" HorizontalAlignment="Left" Height="394" Margin="10,10,0,0" VerticalAlignment="Top" Width="620"/>
+        <Button x:Name="button" Content="Choose image" HorizontalAlignment="Left" Margin="10,418,0,0" VerticalAlignment="Top" Width="620" Height="41" Click="button_Click"/>
+        <TextBox TextWrapping="Wrap" VerticalScrollBarVisibility="Visible" AcceptsReturn="True" x:Name="textBox" HorizontalAlignment="Left" Height="403" Margin="635,43,0,0" Text="Info:" VerticalAlignment="Top" Width="311"/>
+
+    </Grid>
+</Window>
