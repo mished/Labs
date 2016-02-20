@@ -18,9 +18,9 @@ namespace DIP {
 
         public Bitmap ScaleImage() {
             current = new Bitmap((int)(original.Width * coefficient), (int)(original.Height * coefficient));
-            Enumerable.Range(0, current.Width - 1)
+            Enumerable.Range(0, current.Width)
                 .ToList()
-                .ForEach(x => Enumerable.Range(0, current.Height - 1)
+                .ForEach(x => Enumerable.Range(0, current.Height)
                                 .ToList()
                                 .ForEach(y => current.SetPixel(x, y, CalcPixel(x, y))));
             return (Bitmap)current.Clone();
@@ -43,17 +43,19 @@ namespace DIP {
         private IEnumerable<Point> GetSiblings(double x, double y) {
             var tarX = (int)Round(x);
             var tarY = (int)Round(y);
-            yield return GetPoint(tarX, tarY, x, y);
-            if ((tarX - 1).IsInWidth(original.Width)) {
+            if (PointIsInRange(tarX, tarY)) {
+                yield return GetPoint(tarX, tarY, x, y);
+            }            
+            if (PointIsInRange(tarX - 1, tarY)) {
                 yield return GetPoint(tarX - 1, tarY, x, y);
             }
-            if ((tarX + 1).IsInWidth(original.Width)) {
+            if (PointIsInRange(tarX + 1, tarY)) {
                 yield return GetPoint(tarX + 1, tarY, x, y);
             }
-            if ((tarY - 1).IsInHeight(original.Height)) {
+            if (PointIsInRange(tarX, tarY - 1)) {
                 yield return GetPoint(tarX, tarY - 1, x, y);
             }
-            if ((tarY + 1).IsInHeight(original.Height)) {
+            if (PointIsInRange(tarX, tarY + 1)) {
                 yield return GetPoint(tarX, tarY + 1, x, y);
             }
         }
@@ -61,6 +63,11 @@ namespace DIP {
         private Point GetPoint(int tarX, int tarY, double x, double y) {
             var delta = Abs(tarX - x) + Abs(tarY - y);
             return new Point(x: tarX, y: tarY, d: delta);
+        }
+
+        private bool PointIsInRange(int x, int y) {
+            return x >= 0 && x < original.Width
+                && y >= 0 && y < original.Height;
         }
 
         private struct Point {
@@ -73,16 +80,6 @@ namespace DIP {
                 this.y = y;
                 this.d = d;
             }
-        }
-    }
-
-    public static class ScalingUtils {
-        public static bool IsInWidth(this int x, int width) {
-            return x >= 0 && x < width;
-        }
-
-        public static bool IsInHeight(this int y, int height) {
-            return y >= 0 && y < height;
         }
     }
 }
