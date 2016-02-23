@@ -9,21 +9,21 @@ namespace DIP {
         private Bitmap current;
         private double coefficient;
 
+        public Bitmap Image => (Bitmap)current.Clone();
+
         private Scaling() { }
 
         public Scaling(Bitmap image, double coefficient) {
             this.original = image;
             this.coefficient = coefficient;
+            ScaleImage();
         }
 
-        public Bitmap ScaleImage() {
+        private void ScaleImage() {
             current = new Bitmap((int)(original.Width * coefficient), (int)(original.Height * coefficient));
-            Enumerable.Range(0, current.Width)
-                .ToList()
-                .ForEach(x => Enumerable.Range(0, current.Height)
-                                .ToList()
+            Enumerable.Range(0, current.Width).ToList()
+                .ForEach(x => Enumerable.Range(0, current.Height).ToList()
                                 .ForEach(y => current.SetPixel(x, y, CalcPixel(x, y))));
-            return (Bitmap)current.Clone();
         }
 
         private Color CalcPixel(int x, int y) {
@@ -43,26 +43,21 @@ namespace DIP {
         private IEnumerable<Point> GetSiblings(double x, double y) {
             var tarX = (int)Round(x);
             var tarY = (int)Round(y);
-            if (PointIsInRange(tarX, tarY)) {
+            if (PointIsInRange(tarX, tarY))
                 yield return GetPoint(tarX, tarY, x, y);
-            }            
-            if (PointIsInRange(tarX - 1, tarY)) {
+            if (PointIsInRange(tarX - 1, tarY))
                 yield return GetPoint(tarX - 1, tarY, x, y);
-            }
-            if (PointIsInRange(tarX + 1, tarY)) {
+            if (PointIsInRange(tarX + 1, tarY))
                 yield return GetPoint(tarX + 1, tarY, x, y);
-            }
-            if (PointIsInRange(tarX, tarY - 1)) {
+            if (PointIsInRange(tarX, tarY - 1))
                 yield return GetPoint(tarX, tarY - 1, x, y);
-            }
-            if (PointIsInRange(tarX, tarY + 1)) {
+            if (PointIsInRange(tarX, tarY + 1))
                 yield return GetPoint(tarX, tarY + 1, x, y);
-            }
         }
 
         private Point GetPoint(int tarX, int tarY, double x, double y) {
             var delta = Abs(tarX - x) + Abs(tarY - y);
-            return new Point(x: tarX, y: tarY, d: delta);
+            return new Point(tarX, tarY, delta);
         }
 
         private bool PointIsInRange(int x, int y) {
