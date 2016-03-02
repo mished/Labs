@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Sockets;
 using System.Net;
-using System.IO;
+using System.Net.Sockets;
+using System.Text;
 
 namespace TCP {
     public class TcpServer {
@@ -16,7 +13,7 @@ namespace TCP {
 
         public TcpServer(int port) {
             serverMachineInfo = Dns.GetHostEntry(Dns.GetHostName());
-            serverEndpoint = new IPEndPoint(serverMachineInfo.AddressList[1], port);
+            serverEndpoint = new IPEndPoint(IPAddress.Parse("127.0.0.1"), port);
             serverSocket = new Socket(serverEndpoint.Address.AddressFamily,
                 SocketType.Stream, ProtocolType.Tcp);
             serverSocket.Bind(serverEndpoint);
@@ -39,32 +36,36 @@ namespace TCP {
 
         private void ProcessConnection(Socket socket) {
             const int minCharsCount = 3;
+            const int charsToProcess = 64;
+            const int bufSize = 1024;
 
             try {
                 if (!socket.Connected) return;
-                using (var stream = new NetworkStream(socket))
-                using (var reader = new BinaryReader(stream))
-                using (var writer = new BinaryWriter(stream)) {
-                    while (true) {
-                        var str = reader.ReadChars(64);
+                var data = "";
+                while (true) {
+                    var bytes = new byte[bufSize];
+                    var recData = socket.Receive(bytes);
+                    data += Encoding.ASCII.GetString(bytes, 0, recData);
+                    if (data.Length >= charsToProcess) {
+                        var str = data.Take(charsToProcess);
                         var charsTable = str.Distinct()
-                        .ToDictionary(c => c,
-                            c => str.Count(x => x == c));
+                            .ToDictionary(c => c, c => str.Count(x => x == c));
                         if (charsTable.Count < minCharsCount) {
-                            writer.Write($"Server got only {charsTable.Count} chars, closing connection.");
+                            var message = $"Server got only {charsTable.Count} chars, closing connection.<EOF>";
+                            socket.Send(Encoding.ASCII.GetBytes(message));
                             socket.Close();
                             break;
                         }
 
                         var result = String.Join(", ",
-                        charsTable.Select(c => $"{c.Key}: {c.Value}"));
+                            charsTable.Select(c => $"{c.Key}: {c.Value}"));
                         Console.WriteLine($"Sending {result}\n");
-                        writer.Write(result);
+                        socket.Send(Encoding.ASCII.GetBytes(result + "<EOF>"));
+                        data = String.Join("", data.Skip(charsToProcess));
                     }
                 }
             } finally {
-                socket.Shutdown(SocketShutdown.Both);
-                socket.Close();                
+                socket.Close();
             }
         }
     }

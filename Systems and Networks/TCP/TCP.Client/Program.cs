@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace TCP {
     class Program {
         static void Main(string[] args) {
-            var client = new Client(new IPEndPoint(IPAddress.Parse("10.26.11.96"), 11000));
+            var client = new Client(new IPEndPoint(IPAddress.Parse("127.0.0.1"), 11000));
         }
     }
 }
