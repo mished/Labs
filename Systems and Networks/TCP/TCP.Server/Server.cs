@@ -27,35 +27,44 @@ namespace TCP {
 
         public void AcceptConnections() {
             while (true) {
-                var socket = serverSocket.Accept();
-                Console.WriteLine("Client connected...\n");
-                ProcessConnection(socket);
+                try {
+                    var socket = serverSocket.Accept();
+                    Console.WriteLine("Client connected...\n");
+                    ProcessConnection(socket);
+                } catch (Exception ex) {
+                    Console.WriteLine($"Exception: {ex.Message}");
+                }
             }
         }
 
         private void ProcessConnection(Socket socket) {
             const int minCharsCount = 3;
 
-            if (!socket.Connected) return;
-            using (var stream = new NetworkStream(socket))
-            using (var reader = new BinaryReader(stream))
-            using (var writer = new BinaryWriter(stream)) {
-                while (true) {
-                    var str = reader.ReadChars(64);
-                    var charsTable = str.Distinct()
+            try {
+                if (!socket.Connected) return;
+                using (var stream = new NetworkStream(socket))
+                using (var reader = new BinaryReader(stream))
+                using (var writer = new BinaryWriter(stream)) {
+                    while (true) {
+                        var str = reader.ReadChars(64);
+                        var charsTable = str.Distinct()
                         .ToDictionary(c => c,
                             c => str.Count(x => x == c));
-                    if (charsTable.Count < minCharsCount) {
-                        writer.Write($"Server got only {charsTable.Count} chars, closing connection.");
-                        socket.Close();
-                        break;
-                    }
+                        if (charsTable.Count < minCharsCount) {
+                            writer.Write($"Server got only {charsTable.Count} chars, closing connection.");
+                            socket.Close();
+                            break;
+                        }
 
-                    var result = String.Join(", ",
+                        var result = String.Join(", ",
                         charsTable.Select(c => $"{c.Key}: {c.Value}"));
-                    Console.WriteLine($"Sending {result}\n");
-                    writer.Write(result);
+                        Console.WriteLine($"Sending {result}\n");
+                        writer.Write(result);
+                    }
                 }
+            } finally {
+                socket.Shutdown(SocketShutdown.Both);
+                socket.Close();                
             }
         }
     }

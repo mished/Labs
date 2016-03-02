@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using TCP;
 
 namespace TCP {
     class Program {
         static void Main(string[] args) {
-            const int port = 11000;
-            var server = new TcpServer(port);
+            var client = new Client(new IPEndPoint(IPAddress.Parse("10.26.11.96"), 11000));
         }
     }
 }
