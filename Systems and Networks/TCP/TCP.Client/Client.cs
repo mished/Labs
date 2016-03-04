@@ -22,10 +22,10 @@ namespace TCP {
 
             try {
                 using (var fileStream = new FileStream("./log.txt", FileMode.Create))
-                using (var fileWriter = new BinaryWriter(fileStream, Encoding.ASCII)) {
+                using (var fileWriter = new StreamWriter(fileStream)) {
                     clientSocket.Connect(serverEndpoint);
-                    Console.WriteLine($"[{DateTime.Now}] Client connected to {clientSocket.RemoteEndPoint.ToString()}\r\n");
-                    fileWriter.Write($"[{DateTime.Now}] Client connected to {clientSocket.RemoteEndPoint.ToString()}\r\n");
+                    Console.WriteLine($"[{DateTime.Now}] Client connected to {clientSocket.RemoteEndPoint.ToString()}\n");
+                    fileWriter.Write($"[{DateTime.Now}] Client connected to {clientSocket.RemoteEndPoint.ToString()}\n");
 
                     var task = Task.Run(() => {
 
@@ -39,8 +39,8 @@ namespace TCP {
                     });
                     while (true) {
                         var message = ReadMessage();
-                        Console.WriteLine($"\n[{DateTime.Now}] Sending message: {message}\r\n");
-                        fileWriter.Write($"\n[{DateTime.Now}] Sending message: {message}\r\n");
+                        Console.WriteLine($"\n[{DateTime.Now}] Sending message: {message}\n");
+                        fileWriter.Write($"[{DateTime.Now}] Sending message: {message}\n");
                         clientSocket.Send(Encoding.ASCII.GetBytes(message));
                     }
                 }
@@ -61,7 +61,7 @@ namespace TCP {
                 var recData = clientSocket.Receive(bytes);
                 data += Encoding.ASCII.GetString(bytes, 0, recData);
             }
-            return $"[{DateTime.Now}] Client received: {data.Replace("<EOF>", "")}\r\n";
+            return $"[{DateTime.Now}] Client received: {data.Replace("<EOF>", "")}\n";
         }
 
         private string ReadMessage() {
