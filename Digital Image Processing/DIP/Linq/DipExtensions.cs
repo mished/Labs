@@ -1,16 +1,14 @@
 ﻿using System.Drawing;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace DIP.Linq {
     public static class DipExtensions {
 
         public static Bitmap Scale(this Bitmap image, double coefficient) {
-            return new Scaling(image).Scale(coefficient);
+            return Scaling.Scale(image, coefficient);
         }
 
         public static Bitmap Equalize(this Bitmap image) {
-            return new Equalization(image).Equalize();
+            return Equalization.Equalize(image);
         }
 
         public static Bitmap Grayscale(this Bitmap image) {
@@ -18,7 +16,7 @@ namespace DIP.Linq {
         }
 
         public static Bitmap Normalize(this Bitmap image) {
-            return new Normalization(image).Normalize();
+            return Normalization.Normalize(image);
         }
     }
 }

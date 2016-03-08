@@ -1,22 +1,12 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Linq;
 
 namespace DIP {
 
-    public class Normalization : IDisposable {
+    public static class Normalization {
 
-        private Bitmap original;
-        private Bitmap current;
-
-        private Normalization() { }
-
-        public Normalization(Bitmap image) {
-            original = image;
-        }
-
-        public Bitmap Normalize() {
-            current = new Bitmap(original.Width, original.Height);
+        public static Bitmap Normalize(Bitmap original) {
+            var current = new Bitmap(original.Width, original.Height);
             var gsBytes = original.GetGrayscaleBytes();
             var gsBytesArr = gsBytes.Get1dArray();
             var oldMin = gsBytesArr.Min();
@@ -32,11 +22,7 @@ namespace DIP {
                 }
             }
 
-            return (Bitmap)current.Clone();
-        }
-
-        public void Dispose() {
-            current.Dispose();
+            return current;
         }
     }
 }

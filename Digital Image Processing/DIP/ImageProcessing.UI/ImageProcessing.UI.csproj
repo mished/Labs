@@ -106,10 +106,6 @@
       <Project>{757f6c05-8514-4f5f-8e62-5ce79aa1d939}</Project>
       <Name>Linq</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Scaling\Scaling.csproj">
-      <Project>{db345c6e-7d0d-4f0f-a7e3-8fbfa96b63c2}</Project>
-      <Name>Scaling</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

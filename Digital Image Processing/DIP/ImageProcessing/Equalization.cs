@@ -4,19 +4,10 @@ using System.Linq;
 
 namespace DIP {
 
-    public class Equalization : IDisposable {
+    public static class Equalization {
 
-        private Bitmap original;
-        private Bitmap current;
-
-        private Equalization() { }
-
-        public Equalization(Bitmap image) {
-            original = image;
-        }
-
-        public Bitmap Equalize() {
-            current = new Bitmap(original.Width, original.Height);
+        public static Bitmap Equalize(Bitmap original) {
+            var current = new Bitmap(original.Width, original.Height);
             var oldLevels = original.GetGrayscaleBytes();
             var newLevels = GetNewBrightnessLevels(oldLevels.Get1dArray());
             for (var i = 0; i < original.Width; i++) {
@@ -27,10 +18,10 @@ namespace DIP {
                 }
             }
 
-            return (Bitmap)current.Clone();
+            return current;
         }
 
-        private byte[] GetNewBrightnessLevels(byte[] oldLevels) {
+        private static byte[] GetNewBrightnessLevels(byte[] oldLevels) {
             const int colorLevels = 255;
             var count = oldLevels.Count();
             var frq = new int[colorLevels];
@@ -44,10 +35,6 @@ namespace DIP {
 
             return pmf.Select((x, i) => (byte)Math.Round(colorLevels * pmf.Take(i + 1).Sum()))
                       .ToArray();
-        }
-
-        public void Dispose() {
-            current.Dispose();
         }
 
     }
