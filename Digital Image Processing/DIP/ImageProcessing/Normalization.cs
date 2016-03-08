@@ -1,23 +1,21 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Linq;
 
 namespace DIP {
 
-    public class Normalization {
+    public class Normalization : IDisposable {
 
         private Bitmap original;
         private Bitmap current;
-
-        public Bitmap Image => (Bitmap)current.Clone();
 
         private Normalization() { }
 
         public Normalization(Bitmap image) {
             original = image;
-            Normalize();
         }
 
-        private void Normalize() {
+        public Bitmap Normalize() {
             current = new Bitmap(original.Width, original.Height);
             var gsBytes = original.GetGrayscaleBytes();
             var gsBytesArr = gsBytes.Get1dArray();
@@ -33,6 +31,12 @@ namespace DIP {
                     current.SetPixel(i, j, Color.FromArgb(255, newVal, newVal, newVal));
                 }
             }
+
+            return (Bitmap)current.Clone();
+        }
+
+        public void Dispose() {
+            current.Dispose();
         }
     }
 }

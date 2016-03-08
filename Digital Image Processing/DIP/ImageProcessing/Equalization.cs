@@ -9,16 +9,13 @@ namespace DIP {
         private Bitmap original;
         private Bitmap current;
 
-        public Bitmap Image => (Bitmap)current.Clone();
-
         private Equalization() { }
 
         public Equalization(Bitmap image) {
             original = image;
-            Equalize();
         }
 
-        private void Equalize() {
+        public Bitmap Equalize() {
             current = new Bitmap(original.Width, original.Height);
             var oldLevels = original.GetGrayscaleBytes();
             var newLevels = GetNewBrightnessLevels(oldLevels.Get1dArray());
@@ -29,6 +26,8 @@ namespace DIP {
                     current.SetPixel(i, j, Color.FromArgb(255, newLevel, newLevel, newLevel));
                 }
             }
+
+            return (Bitmap)current.Clone();
         }
 
         private byte[] GetNewBrightnessLevels(byte[] oldLevels) {

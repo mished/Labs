@@ -10,21 +10,19 @@ namespace DIP {
         private Bitmap current;
         private double coefficient;
 
-        public Bitmap Image => (Bitmap)current.Clone();
-
         private Scaling() { }
 
-        public Scaling(Bitmap image, double coefficient) {
+        public Scaling(Bitmap image) {
             this.original = image;
-            this.coefficient = coefficient;
-            ScaleImage();
         }
 
-        private void ScaleImage() {
+        public Bitmap Scale(double coefficient) {
+            this.coefficient = coefficient;
             current = new Bitmap((int)(original.Width * coefficient), (int)(original.Height * coefficient));
             Enumerable.Range(0, current.Width).ToList()
                 .ForEach(x => Enumerable.Range(0, current.Height).ToList()
                                 .ForEach(y => current.SetPixel(x, y, CalcPixel(x, y))));
+            return (Bitmap)current.Clone();
         }
 
         private Color CalcPixel(int x, int y) {
