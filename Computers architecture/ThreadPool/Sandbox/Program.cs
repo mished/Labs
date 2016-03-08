@@ -14,7 +14,7 @@ namespace Sandbox {
 
             var path = "..\\..\\img\\";
             var i = 0;
-            var pool = new GoPool(20);
+            var pool = new GoPool(10);
             var qPool = new GoPool(1);
 
             Directory.GetFiles(path, "*.bmp").ToList().ForEach(file => {
@@ -31,6 +31,8 @@ namespace Sandbox {
                     Console.WriteLine($"[{file}]: {sw.ElapsedMilliseconds}ms");
                 });
             });
+            pool.Dispose();
+            qPool.Dispose();
         }
     }
 }

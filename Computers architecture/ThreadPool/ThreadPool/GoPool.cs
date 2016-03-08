@@ -4,34 +4,46 @@ using System.Threading;
 
 namespace Mished.ThreadPool {
 
-    public class GoPool {
+    public class GoPool : IDisposable {
         private int threadsCount;
-        private SemaphoreSlim throttler;
+        private SemaphoreSlim pendingTasks;
         private Object thisLock = new Object();
         private Queue<Action> tasks = new Queue<Action>();
+        private List<Thread> workers = new List<Thread>();
 
         private GoPool() { }
 
         public GoPool(int threads) {
             threadsCount = threads;
-            throttler = new SemaphoreSlim(threadsCount);
+            pendingTasks = new SemaphoreSlim(0);
+            for (var i = 0; i < threadsCount; ++i) {
+                var worker = new Thread(ConsumeTasks);
+                workers.Add(worker);
+                worker.Start();
+            }
         }
 
         public void Go(Action action) {
-            tasks.Enqueue(action);
-            ProcessTask();
+            lock (thisLock) {
+                tasks.Enqueue(action);
+            }
+            pendingTasks.Release();
         }
 
-        private async void ProcessTask() {
-            await throttler.WaitAsync();
-            new Thread(() => {
+        private void ConsumeTasks() {
+            while (true) {
+                pendingTasks.Wait();
                 Action task;
                 lock (thisLock) {
                     task = tasks.Dequeue();
                 }
+                if (task == null) return;
                 task();
-                throttler.Release();
-            }).Start();
+            }
+        }
+
+        public void Dispose() {
+            workers.ForEach(x => Go(null));
         }
 
     }
