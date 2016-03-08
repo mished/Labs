@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3F9D9757-1C5B-4D54-8F5D-0EA2B5B1AF71}</ProjectGuid>
+    <ProjectGuid>{B182D4B8-F6CC-4A2F-BCD0-3B08475E3A33}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Scaling.UI</RootNamespace>
-    <AssemblyName>Scaling.UI</AssemblyName>
+    <RootNamespace>ImageProcessing.UI</RootNamespace>
+    <AssemblyName>ImageProcessing.UI</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -98,6 +98,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ImageProcessing\ImageProcessing.csproj">
+      <Project>{09f3493f-d4d3-4368-864b-49dd3e772d9e}</Project>
+      <Name>ImageProcessing</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Linq\Linq.csproj">
+      <Project>{757f6c05-8514-4f5f-8e62-5ce79aa1d939}</Project>
+      <Name>Linq</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Scaling\Scaling.csproj">
       <Project>{db345c6e-7d0d-4f0f-a7e3-8fbfa96b63c2}</Project>
       <Name>Scaling</Name>

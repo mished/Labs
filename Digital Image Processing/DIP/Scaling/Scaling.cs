@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using static System.Math;
 
 namespace DIP {
-    public class Scaling {
+    public class Scaling : IDisposable {
         private Bitmap original;
         private Bitmap current;
         private double coefficient;
@@ -75,6 +76,10 @@ namespace DIP {
                 this.y = y;
                 this.d = d;
             }
+        }
+
+        public void Dispose() {
+            current.Dispose();
         }
     }
 }
