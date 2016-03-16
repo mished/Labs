@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 namespace UDP {
     class Program {
         static void Main(string[] args) {
-            var server = new Server(11000);
+            const int port = 11000;
+            var server = new Server(port);
         }
     }
 }

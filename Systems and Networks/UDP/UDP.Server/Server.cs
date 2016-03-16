@@ -17,19 +17,37 @@ namespace UDP {
                 ProtocolType.Udp);
             broadcast = IPAddress.Parse("127.0.0.1");
             endPoint = new IPEndPoint(broadcast, port);
+            socket.Bind(endPoint);            
             Console.WriteLine($"Server waiting for broadcast at {endPoint.Address}:{endPoint.Port}");
             WaitForBroadcast(socket);
         }
 
         private void WaitForBroadcast(Socket socket) {
+            var buffer = new byte[1024];
+            
             while(true) {
                 try {
-                    socket.Accept();
+                    var mess = ReadMessage();
+                    buffer = Encoding.ASCII.GetBytes(mess);
+                    socket.SendTo(buffer,endPoint);
                 }
                 finally {                
                     socket.Close();
                 }
             }
+        }
+
+        private string ReadMessage()
+        {
+            var message = "";
+            while (true)
+            {
+                var ch = Console.ReadKey();
+                if (ch.Key == ConsoleKey.PageDown)
+                    break;
+                message += ch.KeyChar;
+            }
+            return message;
         }
     }
 }
