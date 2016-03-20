@@ -16,33 +16,48 @@ namespace UDP {
             endPoint = new IPEndPoint(broadcast, port);
             server = new UdpClient(endPoint);          
             Console.WriteLine($"Server waiting for broadcast at {endPoint.Address}:{endPoint.Port}");
-            WaitForBroadcast();
-        }
-
-        private void WaitForBroadcast() {
-            var buffer = new byte[1024];
+            ProcessConnection();
             
-            while(true) {
-                try {
-                   
-                }
-                finally {                
-                   
-                }
-            }
         }
+       
+        private void ProcessConnection() {
+        
+            const int minCharsCount = 3;
+            const int charsToProcess = 64;
+            const int bufSize = 1024;
 
-        private string ReadMessage()
-        {
-            var message = "";
-            while (true)
-            {
-                var ch = Console.ReadKey();
-                if (ch.Key == ConsoleKey.PageDown)
-                    break;
-                message += ch.KeyChar;
+            try
+            {                
+                var data = "";
+                while (true)
+                {              
+                    var bytes = server.Receive(ref endPoint);
+                    data += Encoding.ASCII.GetString(bytes);
+                    if (data.Length >= charsToProcess)
+                    {
+                        var str = data.Take(charsToProcess);
+                        var charsTable = str.Distinct()
+                            .ToDictionary(c => c, c => str.Count(x => x == c));
+                        if (charsTable.Count < minCharsCount)
+                        {
+                            var message = $"Server got only {charsTable.Count} chars, closing connection.<EOF>";
+                            server.Send(Encoding.ASCII.GetBytes(message), bufSize, endPoint);
+                            server.Close();
+                            break;
+                        }
+
+                        var result = String.Join(", ",
+                            charsTable.Select(c => $"{c.Key}: {c.Value}"));
+                        Console.WriteLine($"Sending {result}\n");
+                        server.Send(Encoding.ASCII.GetBytes(result + "<EOF>"),bufSize,endPoint);
+                        data = String.Join("", data.Skip(charsToProcess));
+                    }
+                }
             }
-            return message;
+            finally
+            {
+                server.Close();
+            }
         }
     }
 }
