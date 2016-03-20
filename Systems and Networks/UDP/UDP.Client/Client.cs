@@ -8,24 +8,31 @@ using System.Threading.Tasks;
 
 namespace UDP {
     public class Client {
-        UdpClient listener;
-        IPEndPoint groupEP ;
+        UdpClient client;
+        IPEndPoint endPoint ;
 
-        public Client(int port) {
-            listener = new UdpClient(port);
-            groupEP = new IPEndPoint(IPAddress.Any, port);
+        public Client(string hostname,int port) {
+            var broadcast = IPAddress.Parse(hostname);
+            endPoint = new IPEndPoint(broadcast, port);            
+            ConnectToServer();    
 
-            Broadcast();
+           // Broadcast();
         }
 
-        private void Broadcast() {
-            while(true) {
-                var bytes = listener.Receive(ref groupEP);     
-                var mess = Encoding.ASCII.GetChars(bytes);
-                Console.WriteLine(new string(mess));
+        private void ConnectToServer()
+        {   try {
+                client = new UdpClient();
+                client.Connect(endPoint);
+                Console.WriteLine($"[{DateTime.Now}] Client connected to {endPoint.ToString()}\n");
+                Console.ReadKey();
             }
+            
+            finally {
+            
 
-        }
+            }
+            
+        }        
 
         private string ReadMessage()
         {

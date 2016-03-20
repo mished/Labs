@@ -8,7 +8,8 @@ namespace UDP {
     class Program {
         static void Main(string[] args) {
             const int port = 11000;
-            var server = new Server(port);
+            const string hostname = "127.0.0.1";
+            var server = new Server(hostname, port);
         }
     }
 }
