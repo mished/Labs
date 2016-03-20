@@ -38,18 +38,18 @@ namespace UDP {
                         var str = data.Take(charsToProcess);
                         var charsTable = str.Distinct()
                             .ToDictionary(c => c, c => str.Count(x => x == c));
-                        if (charsTable.Count < minCharsCount)
-                        {
+                   //     if (charsTable.Count < minCharsCount)
+                    //    {
                             var message = $"Server got only {charsTable.Count} chars, closing connection.<EOF>";
-                            server.Send(Encoding.ASCII.GetBytes(message), bufSize, endPoint);
+                            server.Send(Encoding.ASCII.GetBytes(message), message.Length, endPoint);
                             server.Close();
                             break;
-                        }
+                     //   }
 
                         var result = String.Join(", ",
                             charsTable.Select(c => $"{c.Key}: {c.Value}"));
                         Console.WriteLine($"Sending {result}\n");
-                        server.Send(Encoding.ASCII.GetBytes(result + "<EOF>"),bufSize,endPoint);
+                        server.Send(Encoding.ASCII.GetBytes(result + "<EOF>"),result.Length,endPoint);
                         data = String.Join("", data.Skip(charsToProcess));
                     }
                 }
