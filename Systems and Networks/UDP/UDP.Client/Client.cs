@@ -12,23 +12,22 @@ namespace UDP {
         UdpClient client;
         IPEndPoint endPoint ;
 
-        public Client(string hostname,int port) {
-            var broadcast = IPAddress.Parse(hostname);
-            endPoint = new IPEndPoint(broadcast, port);            
-            ConnectToServer(port);          
+        public Client(string hostname,int port,int serverPort) {            
+            client = new UdpClient(port);         
+            endPoint = new IPEndPoint(IPAddress.Parse(hostname), serverPort);
+            StartSending(port);          
         }
 
-        private void ConnectToServer(int port)
+        private void StartSending(int port)
         {
 
             try
             {
-                using (var fileStream = new FileStream("./log.txt", FileMode.Create))
+                using (var fileStream = new FileStream("log.txt", FileMode.Create))
                 using (var fileWriter = new StreamWriter(fileStream))
-                {
-                    client = new UdpClient(port);
-                    Console.WriteLine($"[{DateTime.Now}] Client connected to {endPoint.ToString()}\n");
-                    fileWriter.Write($"[{DateTime.Now}] Client connected to {endPoint.ToString()}\n");
+                {                  
+                    Console.WriteLine($"[{DateTime.Now}] Client connected. Local End Point: {endPoint.ToString()}\n");                  
+                    fileWriter.WriteLine($"[{DateTime.Now}] Client connected. Local End Point: {endPoint.ToString()}");
 
                     var task = Task.Run(() => {
 
@@ -45,8 +44,8 @@ namespace UDP {
                     {
                         var message = ReadMessage();
                         Console.WriteLine($"\n[{DateTime.Now}] Sending message: {message}\n");
-                        fileWriter.Write($"[{DateTime.Now}] Sending message: {message}\n");
-                        client.Send(Encoding.ASCII.GetBytes(message),message.Length,endPoint);
+                        fileWriter.WriteLine($"[{DateTime.Now}] Sending message: {message}");                        
+                        client.Send(Encoding.ASCII.GetBytes(message), message.Length, endPoint);
                     }
                 }
             }
