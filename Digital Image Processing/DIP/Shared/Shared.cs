@@ -38,10 +38,22 @@ namespace DIP {
             }
         }
 
-        public static byte[] Get1dArray(this byte[,] bitmap) {            
+        public static byte[] Get1dArray(this byte[,] bitmap) {
             var res = new byte[bitmap.Length];
             Buffer.BlockCopy(bitmap, 0, res, 0, bitmap.Length);
             return res;
+        }
+
+        public static IEnumerable<int[]> GetSiblingCoordinates(int i, int j) {
+            yield return new int[] { i - 1, j - 1 };
+            yield return new int[] { i, j - 1 };
+            yield return new int[] { i + 1, j - 1 };
+            yield return new int[] { i - 1, j };
+            yield return new int[] { i, j };
+            yield return new int[] { i + 1, j };
+            yield return new int[] { i + 1, j - 1 };
+            yield return new int[] { i + 1, j };
+            yield return new int[] { i + 1, j + 1 };
         }
 
     }

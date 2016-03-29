@@ -9,12 +9,14 @@
     <Grid>
         <Image x:Name="imageOriginal" VerticalAlignment="Top" HorizontalAlignment="Left" Stretch="None" Margin="10,10,675,133" />
         <Image x:Name="imageResult" VerticalAlignment="Top" HorizontalAlignment="Right" Stretch="None" Margin="675,10,10,133" />
-        <Button x:Name="button" Content="Choose image" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="20" Width="620" Height="41" Click="button_Click"/>
+        <Button x:Name="button" Content="Choose image" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10,0,675,10" Width="620" Height="41" Click="button_Click"/>
         <TextBox x:Name="coefTextBox" HorizontalAlignment="Right" Height="23" VerticalAlignment="Bottom" Margin="0,0,105,100" TextWrapping="Wrap" Text="0.5" Width="120"/>
         <Button x:Name="scaleButton" Content="Scale" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="25, 100" Width="75" Click="scaleButton_Click" Height="23"/>
-        <Button x:Name="equalizeButton" Content="Equalize" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="25, 75" Width="75" Height="23" Click="equalizeButton_Click"/>
-        <Button x:Name="normalizeButton" Content="Normalize" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="25, 50" Width="75" Height="23" Click="normalizeButton_Click"/>
+        <Button x:Name="equalizeButton" Content="Equalize" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,105,25" Width="75" Height="23" Click="equalizeButton_Click"/>
+        <Button x:Name="normalizeButton" Content="Normalize" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,185,25" Width="75" Height="23" Click="normalizeButton_Click"/>
         <Button x:Name="grayscaleButton" Content="Grayscale" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="25, 25" Width="75" Height="22" Click="grayscaleButton_Click"/>
+        <Button x:Name="detectEdgesButton" Content="Detect Edges" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,238,101" Width="75" Height="22" Click="detectEdgesButton_Click"/>
+        <ComboBox x:Name="maskTypeComboBox" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,318,101" Width="120" Loaded="maskTypeComboBox_Loaded"/>
 
     </Grid>
 </Window>

@@ -2,7 +2,9 @@
 using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Collections.Generic;
 using System.Windows.Media.Imaging;
+using DIP;
 using DIP.Linq;
 using Microsoft.Win32;
 
@@ -34,6 +36,10 @@ namespace ImageProcessing.UI {
             ProcessImage(ImageActions.Normalize);
         }
 
+        private void detectEdgesButton_Click(object sender, RoutedEventArgs e) {
+            ProcessImage(ImageActions.DetectEdges);
+        }
+
         private void button_Click(object sender, RoutedEventArgs e) {
             var dial = new OpenFileDialog();
             if ((bool)dial.ShowDialog()) {
@@ -51,28 +57,32 @@ namespace ImageProcessing.UI {
                 }
                 ToggleButtons(false);
                 var coef = Convert.ToDouble(coefTextBox.Text);
+                var maskType = (ExchangeMask)Enum.Parse(typeof(ExchangeMask), (string)maskTypeComboBox.SelectedItem);
                 await Task.Run(() => {
-                    
+
                     switch (action) {
                         case ImageActions.Scale:
-                            imgResult = imgOrig.Scale(coef);
-                            break;
+                        imgResult = imgOrig.Scale(coef);
+                        break;
                         case ImageActions.Equalize:
-                            imgResult = imgOrig.Equalize();
-                            break;
+                        imgResult = imgOrig.Equalize();
+                        break;
                         case ImageActions.Grayscale:
-                            imgResult = imgOrig.Grayscale();
-                            break;
+                        imgResult = imgOrig.Grayscale();
+                        break;
                         case ImageActions.Normalize:
-                            imgResult = imgOrig.Normalize();
-                            break;
+                        imgResult = imgOrig.Normalize();
+                        break;
+                        case ImageActions.DetectEdges:
+                        imgResult = imgOrig.DetectEdges(maskType);
+                        break;
                     }
-                    
+
                     Dispatcher.Invoke(() => {
                         SetImageSource(imageResult, imgResult);
                         ToggleButtons(true);
                     });
-                    imgResult.Save("e:\\SAVED.bmp");
+                    imgResult.Save("SAVED.bmp");
                 });
             } catch (Exception ex) {
                 MessageBox.Show($"Error: {ex.Message}");
@@ -95,14 +105,21 @@ namespace ImageProcessing.UI {
             normalizeButton.IsEnabled = value;
             scaleButton.IsEnabled = value;
             button.IsEnabled = value;
+            maskTypeComboBox.IsEnabled = value;
+            detectEdgesButton.IsEnabled = value;
         }
 
         private enum ImageActions {
             Scale,
             Grayscale,
             Equalize,
-            Normalize
+            Normalize,
+            DetectEdges
         }
-        
+
+        private void maskTypeComboBox_Loaded(object sender, RoutedEventArgs e) {
+            maskTypeComboBox.ItemsSource = Enum.GetNames(typeof(ExchangeMask));
+            maskTypeComboBox.SelectedIndex = 0;
+        }
     }
 }

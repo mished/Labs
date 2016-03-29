@@ -18,5 +18,9 @@ namespace DIP.Linq {
         public static Bitmap Normalize(this Bitmap image) {
             return Normalization.Normalize(image);
         }
+
+        public static Bitmap DetectEdges(this Bitmap image, ExchangeMask maskType) {
+            return EdgeDetection.DetectEdges(image, maskType);
+        }
     }
 }
