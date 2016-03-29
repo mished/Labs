@@ -7,10 +7,9 @@ using System.Threading.Tasks;
 namespace UDP {
     class Program {
         static void Main(string[] args) {
-            const int port = 9050;
-            const int serverPort = 11000;
+            const int port = 11000;
             const string hostname = "127.0.0.1";
-            var client = new Client(hostname, port, serverPort);
+            var client = new Client(hostname, port);
         }
     }
 }
