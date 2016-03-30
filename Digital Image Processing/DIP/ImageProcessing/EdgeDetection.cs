@@ -26,7 +26,7 @@ namespace DIP {
                     var newVal = GetSiblings(gsBytes, i, j)
                         .Zip(mask, (a, b) => a * b)
                         .Sum();
-                    newVal = (newVal > 250) ? 255 : 0;
+                    newVal = (newVal > 100) ? 255 : 0;
                     current.SetPixel(i, j, Color.FromArgb(255, newVal, newVal, newVal));
                 }
             return current;
