@@ -17,6 +17,8 @@ namespace DIP {
             new sbyte[] { 1, 1, 1, -1, -2, -1, 1, -1, -1 }
         };
 
+        private const int limit = 100;
+
         public static Bitmap DetectEdges(Bitmap original, ExchangeMask maskType) {
             var mask = masks[(int)maskType];
             var current = new Bitmap(original.Width, original.Height);
@@ -26,7 +28,7 @@ namespace DIP {
                     var newVal = GetSiblings(gsBytes, i, j)
                         .Zip(mask, (a, b) => a * b)
                         .Sum();
-                    newVal = (newVal > 100) ? 255 : 0;
+                    newVal = (newVal > limit) ? 255 : 0;
                     current.SetPixel(i, j, Color.FromArgb(255, newVal, newVal, newVal));
                 }
             return current;
@@ -34,10 +36,12 @@ namespace DIP {
 
         private static IEnumerable<byte> GetSiblings(byte[,] image, int i, int j) {
             return Shared.GetSiblingCoordinates(i, j)
-                .Select(x => GetPointSafe(image, x[0], x[1], image.GetLength(0), image.GetLength(1)));
+                .Select(x => GetPointSafe(image, x[0], x[1]));
         }
 
-        private static byte GetPointSafe(byte[,] image, int i, int j, int width, int height) {
+        private static byte GetPointSafe(byte[,] image, int i, int j) {
+            var width = image.GetLength(0);
+            var height = image.GetLength(1);
             if (i >= 0 && i < width && j >= 0 && j < height)
                 return image[i, j];
             return 0;
