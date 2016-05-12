@@ -36,6 +36,10 @@ namespace ImageProcessing.UI {
             ProcessImage(ImageActions.Normalize);
         }
 
+        private void cvButton_Click(object sender, RoutedEventArgs e) {
+            ProcessImage(ImageActions.CV);
+        }
+
         private void detectEdgesButton_Click(object sender, RoutedEventArgs e) {
             ProcessImage(ImageActions.DetectEdges);
         }
@@ -62,20 +66,23 @@ namespace ImageProcessing.UI {
 
                     switch (action) {
                         case ImageActions.Scale:
-                        imgResult = imgOrig.Scale(coef);
-                        break;
+                            imgResult = imgOrig.Scale(coef);
+                            break;
                         case ImageActions.Equalize:
-                        imgResult = imgOrig.Equalize();
-                        break;
+                            imgResult = imgOrig.Equalize();
+                            break;
                         case ImageActions.Grayscale:
-                        imgResult = imgOrig.Grayscale();
-                        break;
+                            imgResult = imgOrig.Grayscale();
+                            break;
                         case ImageActions.Normalize:
-                        imgResult = imgOrig.Normalize();
-                        break;
+                            imgResult = imgOrig.Normalize();
+                            break;
                         case ImageActions.DetectEdges:
-                        imgResult = imgOrig.DetectEdges(maskType);
-                        break;
+                            imgResult = imgOrig.DetectEdges(maskType);
+                            break;
+                        case ImageActions.CV:
+                            imgResult = CV.Process(imgOrig);
+                            break;
                     }
 
                     Dispatcher.Invoke(() => {
@@ -107,6 +114,7 @@ namespace ImageProcessing.UI {
             button.IsEnabled = value;
             maskTypeComboBox.IsEnabled = value;
             detectEdgesButton.IsEnabled = value;
+            cvButton.IsEnabled = value;
         }
 
         private enum ImageActions {
@@ -114,7 +122,8 @@ namespace ImageProcessing.UI {
             Grayscale,
             Equalize,
             Normalize,
-            DetectEdges
+            DetectEdges,
+            CV
         }
 
         private void maskTypeComboBox_Loaded(object sender, RoutedEventArgs e) {

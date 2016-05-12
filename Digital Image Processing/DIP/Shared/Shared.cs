@@ -38,8 +38,8 @@ namespace DIP {
             }
         }
 
-        public static byte[] Get1dArray(this byte[,] bitmap) {
-            var res = new byte[bitmap.Length];
+        public static T[] Get1dArray<T>(this T[,] bitmap) {
+            var res = new T[bitmap.Length];
             Buffer.BlockCopy(bitmap, 0, res, 0, bitmap.Length);
             return res;
         }
