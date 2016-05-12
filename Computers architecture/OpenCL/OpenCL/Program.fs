@@ -1,4 +1,6 @@
-﻿open FSCL
+﻿module Mished.Test
+
+open FSCL
 open FSCL.Compiler
 open FSCL.Language
 open FSCL.Runtime
@@ -78,7 +80,7 @@ let SobelFilter(inputImage: byte[,], x: int, y: int) =
 [<EntryPoint>]
 let main argv =
     
-    let image = new Bitmap("..\\..\\..\\img\\IMAGE.bmp")
+    let image = new Bitmap("..\\..\\..\\img\\OCTOCAT.jpg")
     let gsImage = image |> Grayscale
     let resData : byte[,] = Array2D.zeroCreate image.Width image.Height
 
@@ -94,6 +96,6 @@ let main argv =
     sw.Stop()
     printfn "%A" sw.ElapsedMilliseconds
     let resBitmap = StoreImage(res)
-    resBitmap.Save("SAVED.bmp")
+    resBitmap.Save("SAVED.jpg")
 
     0
