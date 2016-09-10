@@ -7,7 +7,7 @@ function* getGenerator(t) {
     const lambda = Math.pow(8, t) * t - 3;
     const m = Math.pow(2, 16);
     while (true) {
-        x0 = (lambda * x0) % m; 
+        x0 = (lambda * x0) % m;
         yield x0 / m;
     }
 }
