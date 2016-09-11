@@ -4,7 +4,7 @@ module.exports = {
   debug: true,
   devtool: '#inline-source-map',
   output: {
-    path: path.resolve(__dirname, 'dev_build'),
+    path: path.resolve(__dirname, 'dev-build'),
     filename: 'bundle.js'
   },
   module: {
