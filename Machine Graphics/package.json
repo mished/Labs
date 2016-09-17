@@ -7,10 +7,10 @@
     "test": "mocha '{test,src}/**/*.js'  --require babel-register --reporter nyan",
     "test:watch": "npm run test -- --watch",
     "test:debug": "npm run test -- --debug-brk",
-    "build:prod": "echo 'Not implemented'",
+    "build:prod": "webpack --config=\"webpack.dev.config.js\" -p",
     "build:dev": "webpack --config=\"webpack.dev.config.js\"",
     "serve": "webpack-dev-server --config=\"webpack.dev.config.js\" --content-base dev-build --inline --hot",
-    "publish:gh": "npm run build:dev && cd .. && git subtree push --prefix 'Machine Graphics/dev-build' origin gh-pages"
+    "publish:gh": "npm run build:prod && git add dev-build/* && git commit -m 'Publish to gh-pages' && cd .. && git subtree push --prefix 'Machine Graphics/dev-build' origin gh-pages"
   },
   "author": "",
   "license": "ISC",
