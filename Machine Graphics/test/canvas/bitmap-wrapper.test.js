@@ -1,13 +1,14 @@
 import { describe, it, beforeEach, before } from 'mocha'
 import { expect } from 'chai'
 import BitmapWrapper from '../../src/canvas/bitmap-wrapper'
+import { fromRGBA } from '../../src/utils/color'
 
 describe('BitmapWrapper', function () {
   let imageData, bitmap, whitePixel, blackPixel
 
   before(function () {
-    whitePixel = { r: 255, g: 255, b: 255, a: 255 }
-    blackPixel = { r: 0, g: 0, b: 0, a: 255 }
+    whitePixel = fromRGBA(255, 255, 255, 255)
+    blackPixel = fromRGBA(0, 0, 0, 255)
   })
 
   beforeEach(function () {
@@ -37,7 +38,7 @@ describe('BitmapWrapper', function () {
     expect(bitmap.get(0, 0)).to.be.eql(whitePixel)
   })
 
-  it('get() should return pixel [3, 3]', function () {
+  it('get() should return pixel [2, 2]', function () {
     expect(bitmap.get(2, 2)).to.be.eql(whitePixel)
   })
 
