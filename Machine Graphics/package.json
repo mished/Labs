@@ -9,7 +9,8 @@
     "test:debug": "npm run test -- --debug-brk",
     "build:prod": "echo 'Not implemented'",
     "build:dev": "webpack --config=\"webpack.dev.config.js\"",
-    "serve": "webpack-dev-server --config=\"webpack.dev.config.js\" --content-base dev-build --inline --hot"
+    "serve": "webpack-dev-server --config=\"webpack.dev.config.js\" --content-base dev-build --inline --hot",
+    "publish:gh": "npm run build:dev && cd .. && git subtree push --prefix 'Machine Graphics/dev-build' origin gh-pages"
   },
   "author": "",
   "license": "ISC",
