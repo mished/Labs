@@ -1,0 +1,39 @@
+.mg {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.mg-canvas {
+  border: 1px solid rgba(158, 186, 213, 0.8);
+  box-shadow: 0 0 10px 1px rgba(158, 186, 213, 0.87);
+}
+
+.mg-tools,
+.mg-actions {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.mg-tools__btn,
+.mg-actions__btn {
+  height: 25px;
+  padding: 5px 10px;
+  margin: 0 10px;
+  background-color: rgba(158, 186, 213, 0.3);
+  border: 1px solid rgba(158, 186, 213, 0.3);
+  text-transform: uppercase;
+  border-radius: 5px;
+}
+
+.mg-tools__btn_active {
+  background-color: rgba(63, 63, 191, 0.63);
+  border: 1px solid rgba(63, 63, 191, 0.63);
+}
+

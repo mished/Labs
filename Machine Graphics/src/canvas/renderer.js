@@ -1,31 +1,53 @@
-import BitmapWrapper from './bitmap-wrapper'
-
 export default function createRenderer (canvas) {
   const ctx = canvas.getContext('2d')
-  const imageData = ctx.getImageData(0, 0, canvas.clientWidth, canvas.clientHeight)
-  const undoList = []
-  let bitmap = new BitmapWrapper(imageData)
+  const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+  const width = imageData.width
+  const data = imageData.data
+  const history = [new Uint8ClampedArray(data)]
+  let positionInHistory = 0
 
-  function render (pixels) {
-    saveState()
-    pixels.forEach(p => bitmap.set(p.x, p.y, p.color))
+  function get (x, y) {
+    const i = getPixelPosition(x, y, width)
+    return {
+      r: data[i],
+      g: data[i + 1],
+      b: data[i + 2],
+      a: data[i + 3]
+    }
+  }
+
+  function set (x, y, { r = 0, g = 0, b = 0, a = 255 }) {
+    const i = getPixelPosition(x, y, width)
+    data[i] = r
+    data[i + 1] = g
+    data[i + 2] = b
+    data[i + 3] = a
+  }
+
+  function render () {
     ctx.putImageData(imageData, 0, 0)
+    history.splice(positionInHistory + 1, history.length)
+    history.push(new Uint8ClampedArray(data))
+    positionInHistory = history.length - 1
   }
 
   function undo () {
-    if (!undoList.length) return
-    bitmap = undoList.pop()
-    imageData.data.set(bitmap.data)
+    if (positionInHistory === 0) return
+    positionInHistory -= 1
+    data.set(history[positionInHistory])
     ctx.putImageData(imageData, 0, 0)
   }
 
-  function saveState () {
-    undoList.push(new BitmapWrapper({
-      width: imageData.width,
-      height: imageData.height,
-      data: new Uint8ClampedArray(imageData.data)
-    }))
+  function redo () {
+    if (positionInHistory === history.length - 1) return
+    positionInHistory += 1
+    data.set(history[positionInHistory])
+    ctx.putImageData(imageData, 0, 0)
   }
 
-  return { render, undo, canvas }
+  return { get, set, render, undo, redo, canvas }
+}
+
+function getPixelPosition (x, y, width) {
+  return x * 4 + y * width * 4
 }
