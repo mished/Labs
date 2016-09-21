@@ -4,13 +4,26 @@ export default function drawLine (bitmap, color, x1, y1, x2, y2) {
   const [maxX, maxY] = [Math.max(x1, x2), Math.max(y1, y2)]
   const [minX, minY] = [Math.min(x1, x2), Math.min(y1, y2)]
 
+  let min, max
+  let setPixelFunc
+
   if (maxX - minX > maxY - minY) {
-    for (let x = minX; x <= maxX; ++x) {
-      bitmap.set(x, Math.round(k * x + b), color)
+    [min, max] = [minX, maxX]
+    if (y1 === y2) {
+      setPixelFunc = x => bitmap.set(x, y1, color)
+    } else {
+      setPixelFunc = x => bitmap.set(x, Math.round(k * x + b), color)
     }
   } else {
-    for (let y = minY; y <= maxY; ++y) {
-      bitmap.set(Math.round((y - b) / k), y, color)
+    [min, max] = [minY, maxY]
+    if (x1 === x2) {
+      setPixelFunc = y => bitmap.set(x1, y, color)
+    } else {
+      setPixelFunc = y => bitmap.set(Math.round((y - b) / k), y, color)
     }
+  }
+
+  for (let i = min; i <= max; ++i) {
+    setPixelFunc(i)
   }
 }
