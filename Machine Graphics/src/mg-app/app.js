@@ -19,6 +19,14 @@ export default function init (app) {
     {
       title: 'Line',
       tool: createTool(renderer, { shape: 'line', color: fromRGBA(0, 0, 0, 255) })
+    },
+    {
+      title: 'Circle',
+      tool: createTool(renderer, { shape: 'circle', color: fromRGBA(0, 0, 0, 255) })
+    },
+    {
+      title: 'Ellipse',
+      tool: createTool(renderer, { shape: 'ellipse', color: fromRGBA(0, 0, 0, 255) })
     }
   ]
 

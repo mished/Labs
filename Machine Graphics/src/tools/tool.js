@@ -1,9 +1,13 @@
 import { fromRGBA } from '../utils/color'
 import { pipe } from 'ramda'
 import drawLine from './line'
+import drawCircle from './circle'
+import drawEllipse from './ellipse'
 
 const drawFunctions = {
-  line: drawLine
+  line: drawLine,
+  circle: drawCircle,
+  ellipse: drawEllipse
 }
 
 export default function createTool (renderer, options) {
