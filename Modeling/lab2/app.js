@@ -1,11 +1,3 @@
-/**
- *
- *
- * 0.08333
- * 0..1 (xi^2)
- * auto-corr -> 0
- */
-
 const createRandGen = require('../lab1/app').createRandomGenerator;
 const log = console.log;
 
@@ -23,13 +15,8 @@ const N = uniqValues.length;
 const M = uniqValues.reduce((a, b) => a + b) / N;
 const σ = uniqValues.reduce((a, b) => a + b * b, 0) / N - M * M;
 
-const freqTable = Array.from({ length: 10 }, (_, i) => (i + 1) / 10)
-    .map((x, i, arr) => uniqValues.reduce((acc, val) => acc + isInRange(arr[i - 1] || 0, x, val), 0));
-
-function isInRange(left, right, value) {
-    return value >= left
-        && value < right;
-}
+const freqTable = Array.from({ length: 10 }, () => 0);
+uniqValues.forEach(x => freqTable[x === 1 ? 9 : Math.trunc(x * 10)] += 1);
 
 const χ = freqTable.reduce((a, b) => a + Math.pow((b - N * 0.1), 2) / (N * 0.1), 0);
 
@@ -45,7 +32,7 @@ const fisher = cor2 / (1 - cor2) * (N - 2);
 log('T: ', uniqValues.length);
 log('M: ', M);
 log('σ: ', σ);
-//log('Frequency: ', freqTable);
+log('Frequencies: ', freqTable);
 log('χ: ', χ);
 log('Autocorrelation: ', cor);
 log('Fisher: ', fisher);
