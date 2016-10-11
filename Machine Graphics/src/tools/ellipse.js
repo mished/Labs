@@ -1,4 +1,4 @@
-export default function drawEllipse (bitmap, color, x1, y1, x2, y2) {
+export default function drawEllipse (bitmap, color, { x: x1, y: y1 }, { x: x2, y: y2 }) {
   const [Rx, Ry] = [Math.abs(x1 - x2), Math.abs(y1 - y2)]
   const [Rx2, Ry2] = [Rx * Rx, Ry * Ry]
   const [twoRx2, twoRy2] = [2 * Rx2, 2 * Ry2]

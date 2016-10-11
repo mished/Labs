@@ -1,4 +1,4 @@
-export default function drawLine (bitmap, color, x1, y1, x2, y2) {
+export default function drawLine (bitmap, color, { x: x1, y: y1 }, { x: x2, y: y2 }) {
   const k = (y1 - y2) / (x1 - x2)
   const b = y1 - k * x1
   const [maxX, maxY] = [Math.max(x1, x2), Math.max(y1, y2)]
