@@ -18,25 +18,47 @@ export default function init (app) {
   const tools = [
     {
       title: 'Line',
-      tool: createTool(renderer, { shape: 'line', drawStrategy: 'single-click', color: fromRGBA(0, 0, 0, 255) })
+      tool: createTool({ renderer, shape: 'line', drawStrategy: 'single-click', color: fromRGBA(0, 0, 0, 255) })
     },
     {
       title: 'Circle',
-      tool: createTool(renderer, { shape: 'circle', drawStrategy: 'single-click', color: fromRGBA(0, 0, 0, 255) })
+      tool: createTool({ renderer, shape: 'circle', drawStrategy: 'single-click', color: fromRGBA(0, 0, 0, 255) })
     },
     {
       title: 'Ellipse',
-      tool: createTool(renderer, { shape: 'ellipse', drawStrategy: 'single-click', color: fromRGBA(0, 0, 0, 255) })
+      tool: createTool({ renderer, shape: 'ellipse', drawStrategy: 'single-click', color: fromRGBA(0, 0, 0, 255) })
     },
     {
       title: 'Bezier Curve',
-      tool: createTool(renderer, {
+      tool: createTool({
+        renderer,
+        preview: true,
         shape: 'bezier-curve',
         drawStrategy: 'multi-click',
-        steps: 10,
         color: fromRGBA(0, 0, 0, 255)
       }),
-      input: 'Set order'
+      getOptions: () => {
+        return { steps: Number(window.prompt('Set order', '4')) }
+      }
+    },
+    {
+      title: 'Bezier Surface',
+      tool: createTool({
+        renderer,
+        preview: false,
+        shape: 'bezier-surface',
+        drawStrategy: 'multi-click',
+        color: fromRGBA(0, 0, 0, 255)
+      }),
+      getOptions: () => {
+        const rows = Number(window.prompt('Rows', '4'))
+        const columns = Number(window.prompt('Columns', '4'))
+        return {
+          rows,
+          columns,
+          steps: rows * columns
+        }
+      }
     }
   ]
 
@@ -61,7 +83,7 @@ export default function init (app) {
       btn.classList.add('mg-tools__btn_active')
       if (currentTool) currentTool.off()
       currentTool = x.tool
-      x.input ? currentTool.on(Number(window.prompt(x.input, '4'))) : currentTool.on()
+      x.getOptions ? currentTool.on(x.getOptions()) : currentTool.on()
     }
     return btn
   })

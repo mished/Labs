@@ -1,16 +1,17 @@
-import { fromRGBA } from '../utils/color'
 import { point } from '../utils/point'
 import { pipe } from 'ramda'
 import drawLine from './line'
 import drawCircle from './circle'
 import drawEllipse from './ellipse'
-import drawBezierCurve from './bezier-curve'
+import { drawBezierCurve } from './bezier-curve'
+import drawBezierSurface from './bezier-surface'
 
 const drawFunctions = {
   'line': drawLine,
   'circle': drawCircle,
   'ellipse': drawEllipse,
-  'bezier-curve': drawBezierCurve
+  'bezier-curve': drawBezierCurve,
+  'bezier-surface': drawBezierSurface
 }
 
 const drawStrategies = {
@@ -18,12 +19,12 @@ const drawStrategies = {
   'multi-click': multiClickStrategy
 }
 
-export default function createTool (renderer, options) {
+export default function createTool (options) {
   if (!drawFunctions[options.shape]) {
     throw new Error(`Available shapes: ${Object.keys(drawFunctions).join(', ')}`)
   }
 
-  const drawStrategy = drawStrategies[options.drawStrategy](renderer, options)
+  const drawStrategy = drawStrategies[options.drawStrategy](options)
 
   return {
     on: drawStrategy.on,
@@ -31,15 +32,15 @@ export default function createTool (renderer, options) {
   }
 }
 
-function singleClickStrategy (renderer, options) {
-  let drawFunc
+function singleClickStrategy (options) {
+  const renderer = options.renderer
   const canvas = renderer.canvas
+  let drawFunc
   let isInPreviewState = false
-  let color = options.color || fromRGBA(0, 0, 0, 255)
 
   function onMouseDown (event) {
     drawFunc = pipe(
-      drawFunctions[options.shape].bind(null, renderer, color, point(event.offsetX, event.offsetY)),
+      drawFunctions[options.shape].bind(null, options, point(event.offsetX, event.offsetY)),
       renderer.render
     )
     canvas.addEventListener('mousemove', onMouseMove)
@@ -66,12 +67,12 @@ function singleClickStrategy (renderer, options) {
   }
 }
 
-function multiClickStrategy (renderer, options) {
+function multiClickStrategy (options) {
+  const renderer = options.renderer
+  const canvas = renderer.canvas
   let drawFunc
   let step = 0
-  const canvas = renderer.canvas
   let isInPreviewState = false
-  let color = options.color || fromRGBA(0, 0, 0, 255)
 
   function onMouseMove (event) {
     if (isInPreviewState) renderer.undo()
@@ -83,14 +84,16 @@ function multiClickStrategy (renderer, options) {
   function onMouseUp (event) {
     step += 1
     if (step === 1) {
-      drawFunc = drawFunctions[options.shape].bind(null, renderer, color, point(event.offsetX, event.offsetY))
-      canvas.addEventListener('mousemove', onMouseMove)
+      drawFunc = drawFunctions[options.shape].bind(null, options, point(event.offsetX, event.offsetY))
+      if (options.preview) {
+        canvas.addEventListener('mousemove', onMouseMove)
+      }
     } if (step === options.steps) {
       if (isInPreviewState) renderer.undo()
       drawFunc(point(event.offsetX, event.offsetY))
       renderer.render()
       dispose()
-    } else {
+    } else if (step > 1) {
       drawFunc = drawFunc.bind(null, point(event.offsetX, event.offsetY))
     }
   }
@@ -102,8 +105,8 @@ function multiClickStrategy (renderer, options) {
   }
 
   return {
-    on: (order) => {
-      if (order) options.steps = order
+    on: (newOpts) => {
+      if (newOpts) Object.assign(options, newOpts)
       canvas.addEventListener('mouseup', onMouseUp)
     },
     off: () => {

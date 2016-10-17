@@ -1,4 +1,7 @@
-export default function drawCircle (bitmap, color, { x: x1, y: y1 }, { x: x2, y: y2 }) {
+export default function drawCircle (options, { x: x1, y: y1 }, { x: x2, y: y2 }) {
+  const bitmap = options.renderer
+  const color = options.color
+
   const r = Math.max(Math.abs(x1 - x2), Math.abs(y1 - y2))
   let [x, y] = [0, r]
   let p = 1 - r

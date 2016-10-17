@@ -1,16 +1,26 @@
-export default function drawBezierCurve (bitmap, color, ...points) {
+export function drawBezierCurve (options, ...points) {
+  const bitmap = options.renderer
+  const color = options.color
+
   const t = 0.0001
+  for (let {x, y} of bezierCurvePoints(t, points)) {
+    bitmap.set(x, y, color)
+  }
+}
+
+export function * bezierCurvePoints (t, points) {
+  if (points.length < 2) throw new Error()
 
   for (let i = 0; i <= 1; i += t) {
-    setPoint(i, points)
+    yield getPoint(i, points)
   }
 
-  function setPoint (t, points) {
+  function getPoint (t, points) {
     if (points.length === 2) {
       const p = getControlPointPosition(t, ...points)
-      return bitmap.set(Math.round(p.x), Math.round(p.y), color)
+      return { x: Math.round(p.x), y: Math.round(p.y) }
     }
-    return setPoint(t, reducePoints(t, points))
+    return getPoint(t, reducePoints(t, points))
   }
 
   function reducePoints (t, points) {
