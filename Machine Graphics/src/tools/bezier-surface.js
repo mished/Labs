@@ -2,24 +2,15 @@ import { bezierCurvePoints, drawBezierCurve } from './bezier-curve'
 
 export default function drawBezierSurface (options, ...points) {
   const { rows: r, columns: c } = options
-  const t = 0.0001
-  const step = 500
+  const steps = 20
+  const t = 1 / steps
 
   if (points.length !== r * c) throw new Error()
 
   for (const controlPoints of [getRows(r, c, points), getColumns(r, c, points)]) {
     const curves = controlPoints.map(r => bezierCurvePoints(t, r))
-
-    let curStep = step
-    for (;;) {
-      const curPoints = curves.map(c => c.next().value)
-      if (!curPoints[0]) break
-      if (curStep === step) {
-        drawBezierCurve(options, ...curPoints)
-        curStep = 1
-      } else {
-        curStep += 1
-      }
+    for (let i = 0; i <= steps; ++i) {
+      drawBezierCurve(options, ...curves.map(c => c.next().value))
     }
   }
 }

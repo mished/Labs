@@ -11,7 +11,7 @@ export function drawBezierCurve (options, ...points) {
 export function * bezierCurvePoints (t, points) {
   if (points.length < 2) throw new Error()
 
-  for (let i = 0; i <= 1; i += t) {
+  for (let i = 0; i <= 1; i = Math.round((i + t) * 10000) / 10000) {
     yield getPoint(i, points)
   }
 
