@@ -18,15 +18,15 @@ export default function init (app) {
   const tools = [
     {
       title: 'Line',
-      tool: createTool({ renderer, shape: 'line', drawStrategy: 'single-click', color: fromRGBA(0, 0, 0, 255) })
+      tool: createTool({ renderer, shape: 'line', drawStrategy: 'single-click', color: fromRGBA(31, 183, 107, 200) })
     },
     {
       title: 'Circle',
-      tool: createTool({ renderer, shape: 'circle', drawStrategy: 'single-click', color: fromRGBA(0, 0, 0, 255) })
+      tool: createTool({ renderer, shape: 'circle', drawStrategy: 'single-click', color: fromRGBA(255, 0, 0, 200) })
     },
     {
       title: 'Ellipse',
-      tool: createTool({ renderer, shape: 'ellipse', drawStrategy: 'single-click', color: fromRGBA(0, 0, 0, 255) })
+      tool: createTool({ renderer, shape: 'ellipse', drawStrategy: 'single-click', color: fromRGBA(183, 31, 183, 200) })
     },
     {
       title: 'Bezier Curve',
@@ -35,7 +35,7 @@ export default function init (app) {
         preview: true,
         shape: 'bezier-curve',
         drawStrategy: 'multi-click',
-        color: fromRGBA(0, 0, 0, 255)
+        color: fromRGBA(0, 0, 255, 200)
       }),
       getOptions: () => {
         return { steps: Number(window.prompt('Set order', '4')) }
@@ -48,7 +48,7 @@ export default function init (app) {
         preview: false,
         shape: 'bezier-surface',
         drawStrategy: 'multi-click',
-        color: fromRGBA(0, 0, 0, 255)
+        color: fromRGBA(83, 83, 212, 200)
       }),
       getOptions: () => {
         const rows = Number(window.prompt('Rows', '4'))
@@ -58,6 +58,19 @@ export default function init (app) {
           columns,
           steps: rows * columns
         }
+      }
+    },
+    {
+      title: 'Smooth Polyline',
+      tool: createTool({
+        renderer,
+        preview: true,
+        shape: 'smooth-polyline',
+        drawStrategy: 'multi-click',
+        color: fromRGBA(235, 19, 44, 200)
+      }),
+      getOptions: () => {
+        return { steps: Number(window.prompt('Set order', '4')) }
       }
     }
   ]

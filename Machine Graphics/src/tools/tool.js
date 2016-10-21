@@ -5,13 +5,15 @@ import drawCircle from './circle'
 import drawEllipse from './ellipse'
 import { drawBezierCurve } from './bezier-curve'
 import drawBezierSurface from './bezier-surface'
+import drawSmoothPolyline from './smooth-polyline'
 
 const drawFunctions = {
   'line': drawLine,
   'circle': drawCircle,
   'ellipse': drawEllipse,
   'bezier-curve': drawBezierCurve,
-  'bezier-surface': drawBezierSurface
+  'bezier-surface': drawBezierSurface,
+  'smooth-polyline': drawSmoothPolyline
 }
 
 const drawStrategies = {
