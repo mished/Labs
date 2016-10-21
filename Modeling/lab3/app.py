@@ -25,37 +25,32 @@ def triangular_dist(a, b):
     return r1 + r2
 
 
-def draw_normal():
-    m = 0
-    sigma = 0.8
+def draw_normal(m = 0, sigma = 0.8):
     def expected_func(x):
         return 1 / (2 * sigma**2 * math.pi)**0.5 * math.e**(-(x - m)**2 / (2 * sigma**2))
 
     expected = [(x, expected_func(x)) for x in frange(-5, 6, 0.1)]
-    actual_func = lambda: normal_dist(m, sigma)
+    actual_func = lambda: round(normal_dist(m, sigma))
     draw(expected, actual_func)
 
 
-def draw_exp():
-    lambd = 0.8
+def draw_exp(lambd = 0.6):
     expected = [(x, lambd * math.e**(-lambd * x)) for x in frange(0, 12, 0.1)]
-    actual_func = lambda: exp_dist(lambd)
+    actual_func = lambda: int(exp_dist(lambd))
     draw(expected, actual_func)
 
 
-def draw_uniform():
-    a, b = 2, 10
+def draw_uniform(a = 2, b = 10):
     def expected_func(x):
-        if x < a or x > b: return 0
+        if x <= a or x >= b: return 0
         return 1.0 / (b - a)
 
     expected = [(x, expected_func(x)) for x in range(12)]
-    actual_func = lambda: uniform_dist(a, b)
+    actual_func = lambda: round(uniform_dist(a, b))
     draw(expected, actual_func)
 
 
-def draw_triangular():
-    a, b = 2, 10
+def draw_triangular(a = 2, b = 10):
     c = (b - a) / 2 + a
     def expected_func(x):
         if x < a: return 0
@@ -65,27 +60,26 @@ def draw_triangular():
         return 0
 
     expected = [(x, expected_func(x)) for x in frange(0, 12, 0.1)]
-    actual_func = lambda: triangular_dist(a, b)
+    actual_func = lambda: round(triangular_dist(a, b))
     draw(expected, actual_func)
 
 
 def draw(expected, actual_func):
     expected_x, expected_y = zip(*expected)
     actual_dict = {}
+    plt.figure()
     plt.ion()
-    while True:
-        for value in generate_seq(actual_func, 10000):
-            value = int(value)
-            if (actual_dict.has_key(value)):
-                actual_dict[value] += 1
-            else:
-                actual_dict[value] = 1
-        values_count = sum(actual_dict.values())
-        actual_x = sorted(actual_dict.keys())
-        actual_y = [float(actual_dict[v]) / values_count for v in actual_x]
-        plt.clf()
-        plt.plot(expected_x, expected_y, 'r', actual_x, actual_y, 'b')
-        plt.pause(0.05)
+    for value in generate_seq(actual_func, 1000000):
+        if (actual_dict.has_key(value)):
+            actual_dict[value] += 1
+        else:
+            actual_dict[value] = 1
+    values_count = sum(actual_dict.values())
+    actual_x = sorted(actual_dict.keys())
+    actual_y = [float(actual_dict[v]) / values_count for v in actual_x]
+    plt.clf()
+    plt.plot(expected_x, expected_y, 'r', actual_x, actual_y, 'b')
+    plt.pause(0.05)
 
 
 def generate_seq(func, n):
@@ -101,7 +95,8 @@ def frange(l, r, s):
         c += s
 
 
-#draw_normal()
-#draw_exp()
-#draw_uniform()
+draw_normal()
+draw_exp()
+draw_uniform()
 draw_triangular()
+plt.waitforbuttonpress()
