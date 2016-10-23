@@ -72,6 +72,17 @@ export default function init (app) {
       getOptions: () => {
         return { steps: Number(window.prompt('Set order', '4')) }
       }
+    },
+    {
+      title: 'Gradient Fill',
+      tool: createTool({
+        renderer,
+        shape: 'fill',
+        drawStrategy: 'single-click',
+        color: fromRGBA(183, 31, 183, 200),
+        preview: false,
+        gradient: true
+      })
     }
   ]
 

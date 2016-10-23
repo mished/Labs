@@ -6,6 +6,7 @@ import drawEllipse from './ellipse'
 import { drawBezierCurve } from './bezier-curve'
 import drawBezierSurface from './bezier-surface'
 import drawSmoothPolyline from './smooth-polyline'
+import fill from './fill'
 
 const drawFunctions = {
   'line': drawLine,
@@ -13,7 +14,8 @@ const drawFunctions = {
   'ellipse': drawEllipse,
   'bezier-curve': drawBezierCurve,
   'bezier-surface': drawBezierSurface,
-  'smooth-polyline': drawSmoothPolyline
+  'smooth-polyline': drawSmoothPolyline,
+  'fill': fill
 }
 
 const drawStrategies = {
@@ -45,6 +47,7 @@ function singleClickStrategy (options) {
       drawFunctions[options.shape].bind(null, options, point(event.offsetX, event.offsetY)),
       renderer.render
     )
+    if (options.preview === false) return drawFunc()
     canvas.addEventListener('mousemove', onMouseMove)
     canvas.addEventListener('mouseup', onMouseUp)
   }
