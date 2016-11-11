@@ -7,6 +7,7 @@ import { drawBezierCurve } from './bezier-curve'
 import drawBezierSurface from './bezier-surface'
 import drawSmoothPolyline from './smooth-polyline'
 import fill from './fill'
+import lineClip from './line-clip'
 
 const drawFunctions = {
   'line': drawLine,
@@ -15,7 +16,8 @@ const drawFunctions = {
   'bezier-curve': drawBezierCurve,
   'bezier-surface': drawBezierSurface,
   'smooth-polyline': drawSmoothPolyline,
-  'fill': fill
+  'fill': fill,
+  'line-clip': lineClip
 }
 
 const drawStrategies = {

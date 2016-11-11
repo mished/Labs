@@ -45,7 +45,12 @@ export default function createRenderer (canvas) {
     ctx.putImageData(imageData, 0, 0)
   }
 
-  return { get, set, render, undo, redo, canvas }
+  function clear () {
+    data.set(new Uint8ClampedArray(data.length))
+    render()
+  }
+
+  return { get, set, render, undo, redo, clear, canvas }
 }
 
 function getPixelPosition (x, y, width) {

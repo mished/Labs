@@ -83,6 +83,17 @@ export default function init (app) {
         preview: false,
         gradient: true
       })
+    },
+    {
+      title: 'Line Clip',
+      tool: createTool({
+        renderer,
+        shape: 'line-clip',
+        drawStrategy: 'multi-click',
+        color: fromRGBA(183, 31, 183, 200),
+        preview: true,
+        steps: 3
+      })
     }
   ]
 
@@ -90,6 +101,10 @@ export default function init (app) {
     {
       title: 'Undo',
       action: renderer.undo
+    },
+    {
+      title: 'Clear',
+      action: renderer.clear
     },
     {
       title: 'Redo',

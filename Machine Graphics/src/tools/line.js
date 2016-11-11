@@ -15,14 +15,14 @@ export default function drawLine (options, { x: x1, y: y1 }, { x: x2, y: y2 }) {
     if (y1 === y2) {
       setPixelFunc = x => bitmap.set(x, y1, color)
     } else {
-      setPixelFunc = x => bitmap.set(x, Math.round(k * x + b), color)
+      setPixelFunc = x => bitmap.set(Math.round(x), Math.round(k * x + b), color)
     }
   } else {
     [min, max] = [minY, maxY]
     if (x1 === x2) {
       setPixelFunc = y => bitmap.set(x1, y, color)
     } else {
-      setPixelFunc = y => bitmap.set(Math.round((y - b) / k), y, color)
+      setPixelFunc = y => bitmap.set(Math.round((y - b) / k), Math.round(y), color)
     }
   }
 
