@@ -16,6 +16,10 @@ export default function lineClip (options, ...points) {
   let { x: x0, y: y0 } = points[1]
   let { x: x1, y: y1 } = points[2]
 
+  /**
+   * Liang–Barsky algorithm
+   * @see https://en.wikipedia.org/wiki/Liang-Barsky_algorithm
+   */
   let [t0, t1] = [0, 1]
   let dx, dy
   dx = x1 - x0
