@@ -24,8 +24,8 @@ export default function fill (options, p) {
   queue.push(p)
   while (queue.length) {
     const seed = queue.shift()
-    if (options.gradient) maxDist = Math.max(maxDist, getDistance(seed.x, seed.y))
     const {xl, xr} = getLineBoundaries(seed.x, seed.y)
+    if (options.gradient) maxDist = Math.max(maxDist, getDistance(xl, seed.y), getDistance(xr, seed.y))
     line(options, point(xl, seed.y), point(xr, seed.y))
     findSeedPixels(xl, xr, seed.y - 1)
     findSeedPixels(xl, xr, seed.y + 1)
@@ -39,8 +39,8 @@ export default function fill (options, p) {
   function getLineBoundaries (x, y) {
     let xl = x
     let xr = x
-    while (equals(bitmap.get(xl, y), seedColor)) xl -= 1
-    while (equals(bitmap.get(xr, y), seedColor)) xr += 1
+    while (equals(bitmap.getSafe(xl, y), seedColor)) xl -= 1
+    while (equals(bitmap.getSafe(xr, y), seedColor)) xr += 1
     xl += 1
     xr -= 1
     return { xl, xr }
@@ -49,7 +49,7 @@ export default function fill (options, p) {
   function findSeedPixels (xl, xr, y) {
     while (xl < xr) {
       const initial = xl
-      while (equals(bitmap.get(xl, y), seedColor)) xl += 1
+      while (equals(bitmap.getSafe(xl, y), seedColor)) xl += 1
       if (xl !== initial) queue.push(point(xl - 1, y))
       xl += 1
     }

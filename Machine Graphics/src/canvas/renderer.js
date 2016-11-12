@@ -2,9 +2,15 @@ export default function createRenderer (canvas) {
   const ctx = canvas.getContext('2d')
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
   const width = imageData.width
+  const height = imageData.height
   const data = imageData.data
   const history = [new Uint8ClampedArray(data)]
   let positionInHistory = 0
+
+  const nullColor = 'rgba'.split('').reduce((a, b) => {
+    a[b] = null
+    return a
+  }, {})
 
   function get (x, y) {
     const i = getPixelPosition(x, y, width)
@@ -14,6 +20,12 @@ export default function createRenderer (canvas) {
       b: data[i + 2],
       a: data[i + 3]
     }
+  }
+
+  function getSafe (x, y) {
+    return (x >= 0 && x < width && y >= 0 && y < height)
+      ? get(x, y)
+      : nullColor
   }
 
   function set (x, y, { r = 0, g = 0, b = 0, a = 255 }) {
@@ -50,7 +62,7 @@ export default function createRenderer (canvas) {
     render()
   }
 
-  return { get, set, render, undo, redo, clear, canvas }
+  return { get, getSafe, set, render, undo, redo, clear, canvas }
 }
 
 function getPixelPosition (x, y, width) {
