@@ -8,6 +8,8 @@ import drawBezierSurface from './bezier-surface'
 import drawSmoothPolyline from './smooth-polyline'
 import fill from './fill'
 import lineClip from './line-clip'
+import transform2d from './transform2d'
+import transform3d from './transform3d'
 
 const drawFunctions = {
   'line': drawLine,
@@ -17,7 +19,9 @@ const drawFunctions = {
   'bezier-surface': drawBezierSurface,
   'smooth-polyline': drawSmoothPolyline,
   'fill': fill,
-  'line-clip': lineClip
+  'line-clip': lineClip,
+  'transform2d': transform2d,
+  'transform3d': transform3d
 }
 
 const drawStrategies = {

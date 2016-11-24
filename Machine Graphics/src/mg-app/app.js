@@ -10,7 +10,7 @@ export default function init (app) {
   const canvas = document.createElement('canvas')
   canvas.setAttribute('class', 'mg-canvas')
   canvas.width = app.clientWidth
-  canvas.height = app.clientHeight - 100
+  canvas.height = app.clientHeight - 150
 
   const renderer = createRenderer(canvas)
   let currentTool
@@ -93,6 +93,36 @@ export default function init (app) {
         color: fromRGBA(183, 31, 183, 200),
         preview: true,
         steps: 3
+      })
+    },
+    {
+      title: 'Translate',
+      tool: createTool({
+        renderer,
+        shape: 'transform2d',
+        drawStrategy: 'single-click',
+        color: fromRGBA(183, 31, 183, 200),
+        transform: 'translate'
+      })
+    },
+    {
+      title: 'Rotate',
+      tool: createTool({
+        renderer,
+        shape: 'transform2d',
+        drawStrategy: 'single-click',
+        color: fromRGBA(183, 31, 183, 200),
+        transform: 'rotate'
+      })
+    },
+    {
+      title: 'Transform 3D Demo',
+      tool: createTool({
+        renderer,
+        shape: 'transform3d',
+        drawStrategy: 'multi-click',
+        color: fromRGBA(183, 31, 183, 200),
+        steps: 1
       })
     }
   ]

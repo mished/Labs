@@ -1,3 +1,5 @@
+import { fromRGBA } from '../utils/color'
+
 export default function createRenderer (canvas) {
   const ctx = canvas.getContext('2d')
   const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
@@ -11,6 +13,8 @@ export default function createRenderer (canvas) {
     a[b] = null
     return a
   }, {})
+
+  const whiteColor = fromRGBA(255, 255, 255, 255)
 
   function get (x, y) {
     const i = getPixelPosition(x, y, width)
@@ -34,6 +38,12 @@ export default function createRenderer (canvas) {
     data[i + 1] = g
     data[i + 2] = b
     data[i + 3] = a
+  }
+
+  function translate (x, y, tx, ty) {
+    const color = get(x, y) || whiteColor
+    set(x, y, whiteColor)
+    set(tx, ty, color)
   }
 
   function render () {
@@ -62,7 +72,19 @@ export default function createRenderer (canvas) {
     render()
   }
 
-  return { get, getSafe, set, render, undo, redo, clear, canvas }
+  return {
+    get,
+    getSafe,
+    set,
+    translate,
+    render,
+    undo,
+    redo,
+    clear,
+    canvas,
+    width,
+    height
+  }
 }
 
 function getPixelPosition (x, y, width) {
