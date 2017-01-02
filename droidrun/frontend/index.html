@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html ng-app="droidrun">
+
+<head>
+  <meta charset="UTF-8">
+  <title></title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="auto-bundle.css">
+  <script type="text/javascript" src="auto-bundle.js"></script>
+  <base href="/">
+</head>
+
+<body ng-controller="MainController">
+
+  <div class="container">
+    <div class="row">
+      <div dr-field class="nine columns field"></div>
+    </div>
+
+    <div class="row" ng-class="{'game-buttons-disabled': buttonsDisabled}">
+      <button ng-class="{'button-primary': turnLeftPicked}" class="button three columns" ng-click="vote('turn left', 'turnLeftPicked')">TURN LEFT</button>
+      <button ng-class="{'button-primary': movePicked}" class="button three columns" ng-click="vote('move', 'movePicked')">MOVE</button>
+      <button ng-class="{'button-primary': turnRightPicked}" class="button three columns" ng-click="vote('turn right', 'turnRightPicked')">TURN RIGHT</button>
+    </div>
+  </div>
+  
+  <div dr-log class="log">
+    <div class="log-content">
+      <span ng-repeat="mes in log track by $index">
+        {{mes}}
+      </span>
+    </div>       
+  </div>
+  
+  <div class="log-name">      
+      <input ng-model="userName"
+             class="u-full-width"
+             type="text"
+             placeholder="Who are you?">
+      <button ng-click="saveName()" class="button-primary">SAVE</button>
+  </div> 
+
+</body>
+
+</html>

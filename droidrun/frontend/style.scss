@@ -1,0 +1,51 @@
+.field {
+	margin: 50px 0;
+}
+
+.log, .log-name {
+	display: none;
+}
+
+.game-buttons-disabled {
+	button:hover {
+		cursor: not-allowed;
+		color: #555;
+		border-color: #bbb;
+	}
+} 
+
+@media screen and (min-width: 550px) {
+	.log {
+		display: block;
+		position: fixed;
+		right: 5px;
+		top: 50px;
+		width: 15%;
+		height: 60%;
+		border: 1px solid #D1D1D1;
+    border-radius: 4px;
+		font-style: italic;
+		color: #999999;
+		overflow-y: auto;
+		
+		
+		span {
+			display: block;
+			padding: 0 5px;
+		}
+	}
+	
+	.log-name {
+		display: block;
+		input, button {	
+			position: fixed;
+			right: 5px;
+			top: 68%;
+			width: 15%;
+		}
+					
+		button {
+			top: 73%;
+		}
+	}
+}
